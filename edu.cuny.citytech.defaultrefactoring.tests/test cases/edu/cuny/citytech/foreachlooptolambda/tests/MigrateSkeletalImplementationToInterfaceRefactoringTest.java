@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cuny.citytech.defaultrefactoring.ui.tests;
+package edu.cuny.citytech.foreachlooptolambda.tests;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;
