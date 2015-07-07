@@ -5,10 +5,10 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>edu.cuny.citytech.defaultrefactoring</groupId>
+    <groupId>edu.cuny.citytech.foreachlooptolambda</groupId>
     <artifactId>parent</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>edu.cuny.citytech.defaultrefactoring.ui</artifactId>
+  <artifactId>edu.cuny.citytech.foreachlooptolambda.ui</artifactId>
   <packaging>eclipse-plugin</packaging>
 </project>
