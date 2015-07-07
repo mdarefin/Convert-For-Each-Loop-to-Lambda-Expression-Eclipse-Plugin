@@ -1,11 +1,11 @@
 /**
  * 
  */
-package edu.cuny.citytech.defaultrefactoring.ui.descriptors;
+package edu.cuny.citytech.foreachlooptolambda.ui.descriptors;
 
 import java.util.Map;
 
-import edu.cuny.citytech.defaultrefactoring.ui.refactorings.MigrateSkeletalImplementationToInterfaceRefactoring;
+import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambdaRefactoring;
 import edu.cuny.citytech.refactoring.common.Refactoring;
 import edu.cuny.citytech.refactoring.common.RefactoringDescriptor;
 
@@ -13,12 +13,12 @@ import edu.cuny.citytech.refactoring.common.RefactoringDescriptor;
  * @author raffi
  *
  */
-public class MigrateSkeletalImplementationToInterfaceRefactoringDescriptor
+public class ForeachLoopToLambdaRefactoringDescriptor
 		extends RefactoringDescriptor {
 
 	public static final String REFACTORING_ID = "edu.cuny.citytech.defaultrefactoring.migrate.skeletal.implementation.to.interface"; //$NON-NLS-1$
 
-	public MigrateSkeletalImplementationToInterfaceRefactoringDescriptor(
+	public ForeachLoopToLambdaRefactoringDescriptor(
 			String project, String description, String comment,
 			@SuppressWarnings("rawtypes") Map arguments) {
 		// TODO: May need an API change flag here as well.
@@ -34,6 +34,6 @@ public class MigrateSkeletalImplementationToInterfaceRefactoringDescriptor
 	 */
 	@Override
 	protected Refactoring createRefactoring() {
-		return new MigrateSkeletalImplementationToInterfaceRefactoring();
+		return new ForeachLoopToLambdaRefactoring();
 	}
 }

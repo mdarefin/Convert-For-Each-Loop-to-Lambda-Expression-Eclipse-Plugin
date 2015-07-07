@@ -1,4 +1,4 @@
-package edu.cuny.citytech.defaultrefactoring.ui.refactorings;
+package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -15,7 +15,7 @@ import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
-import edu.cuny.citytech.defaultrefactoring.ui.messages.Messages;
+import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.refactoring.common.Refactoring;
 
 /**
@@ -24,7 +24,7 @@ import edu.cuny.citytech.refactoring.common.Refactoring;
  * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
  *         Khatchadourian</a>
  */
-public class MigrateSkeletalImplementationToInterfaceRefactoring extends
+public class ForeachLoopToLambdaRefactoring extends
 		Refactoring {
 
 	/**
@@ -38,7 +38,7 @@ public class MigrateSkeletalImplementationToInterfaceRefactoring extends
 	 * @param methods
 	 *            The methods to refactor.
 	 */
-	public MigrateSkeletalImplementationToInterfaceRefactoring(
+	public ForeachLoopToLambdaRefactoring(
 			IMethod... methods) {
 		this.methods = new HashSet<IMethod>(Arrays.asList(methods));
 	}
@@ -46,7 +46,7 @@ public class MigrateSkeletalImplementationToInterfaceRefactoring extends
 	/**
 	 * Default ctor.
 	 */
-	public MigrateSkeletalImplementationToInterfaceRefactoring() {
+	public ForeachLoopToLambdaRefactoring() {
 	}
 
 	@Override

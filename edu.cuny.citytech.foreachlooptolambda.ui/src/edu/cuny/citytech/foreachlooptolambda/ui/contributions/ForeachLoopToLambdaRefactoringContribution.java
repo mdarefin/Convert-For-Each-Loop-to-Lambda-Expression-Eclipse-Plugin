@@ -1,13 +1,13 @@
-package edu.cuny.citytech.defaultrefactoring.ui.contributions;
+package edu.cuny.citytech.foreachlooptolambda.ui.contributions;
 
 import java.util.Map;
 
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 
-import edu.cuny.citytech.defaultrefactoring.ui.descriptors.MigrateSkeletalImplementationToInterfaceRefactoringDescriptor;
+import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
 import edu.cuny.citytech.refactoring.common.RefactoringContribution;
 
-public class MigrateSkeletalImplementationToInterfaceRefactoringContribution
+public class ForeachLoopToLambdaRefactoringContribution
 		extends RefactoringContribution {
 
 	/*
@@ -23,7 +23,7 @@ public class MigrateSkeletalImplementationToInterfaceRefactoringContribution
 			String description, String comment,
 			@SuppressWarnings("rawtypes") Map arguments, int flags)
 			throws IllegalArgumentException {
-		return new MigrateSkeletalImplementationToInterfaceRefactoringDescriptor(
+		return new ForeachLoopToLambdaRefactoringDescriptor(
 				project, description, comment, arguments);
 	}
 }

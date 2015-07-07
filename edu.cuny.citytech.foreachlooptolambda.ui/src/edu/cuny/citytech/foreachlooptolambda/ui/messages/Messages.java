@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cuny.citytech.defaultrefactoring.ui.messages;
+package edu.cuny.citytech.foreachlooptolambda.ui.messages;
 
 import org.eclipse.osgi.util.NLS;
 

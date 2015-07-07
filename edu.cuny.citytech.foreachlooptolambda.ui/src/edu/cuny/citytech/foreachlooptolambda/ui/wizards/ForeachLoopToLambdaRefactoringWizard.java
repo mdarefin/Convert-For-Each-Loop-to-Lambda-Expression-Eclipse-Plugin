@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.cuny.citytech.defaultrefactoring.ui.wizards;
+package edu.cuny.citytech.foreachlooptolambda.ui.wizards;
 
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.internal.ui.refactoring.RefactoringMessages;
@@ -11,17 +11,17 @@ import org.eclipse.ltk.core.refactoring.Refactoring;
 import org.eclipse.ltk.ui.refactoring.RefactoringWizard;
 import org.eclipse.swt.widgets.Shell;
 
-import edu.cuny.citytech.defaultrefactoring.ui.refactorings.MigrateSkeletalImplementationToInterfaceRefactoring;
+import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambdaRefactoring;
 
 /**
  * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
  *         Khatchadourian</a>
  *
  */
-public class MigrateSkeletalImplementationToInterfaceRefactoringWizard extends
+public class ForeachLoopToLambdaRefactoringWizard extends
 		RefactoringWizard {
 
-	public MigrateSkeletalImplementationToInterfaceRefactoringWizard(
+	public ForeachLoopToLambdaRefactoringWizard(
 			Refactoring refactoring) {
 		super(refactoring, RefactoringWizard.DIALOG_BASED_USER_INTERFACE);
 	}
@@ -36,9 +36,9 @@ public class MigrateSkeletalImplementationToInterfaceRefactoringWizard extends
 	}
 
 	public static void startRefactoring(IMethod[] methods, Shell shell) {
-		Refactoring refactoring = new MigrateSkeletalImplementationToInterfaceRefactoring(
+		Refactoring refactoring = new ForeachLoopToLambdaRefactoring(
 				methods);
-		MigrateSkeletalImplementationToInterfaceRefactoringWizard wizard = new MigrateSkeletalImplementationToInterfaceRefactoringWizard(
+		ForeachLoopToLambdaRefactoringWizard wizard = new ForeachLoopToLambdaRefactoringWizard(
 				refactoring);
 		new RefactoringStarter().activate(wizard, shell,
 				RefactoringMessages.OpenRefactoringWizardAction_refactoring,

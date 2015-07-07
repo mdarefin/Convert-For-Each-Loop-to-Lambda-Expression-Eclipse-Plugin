@@ -1,4 +1,4 @@
-package edu.cuny.citytech.defaultrefactoring.ui.handlers;
+package edu.cuny.citytech.foreachlooptolambda.ui.handlers;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-import edu.cuny.citytech.defaultrefactoring.ui.wizards.MigrateSkeletalImplementationToInterfaceRefactoringWizard;
+import edu.cuny.citytech.foreachlooptolambda.ui.wizards.ForeachLoopToLambdaRefactoringWizard;
 
 /**
  * Our sample handler extends AbstractHandler, an IHandler base class.
@@ -19,7 +19,7 @@ import edu.cuny.citytech.defaultrefactoring.ui.wizards.MigrateSkeletalImplementa
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class MigrateSkeletalImplementationToInterfaceHandler extends
+public class ForeachLoopToLambdaHandler extends
 		AbstractHandler {
 
 	/**
@@ -37,7 +37,7 @@ public class MigrateSkeletalImplementationToInterfaceHandler extends
 
 		if (methods.length > 0) {
 			Shell shell = HandlerUtil.getActiveShellChecked(event);
-			MigrateSkeletalImplementationToInterfaceRefactoringWizard
+			ForeachLoopToLambdaRefactoringWizard
 					.startRefactoring(methods, shell);
 		}
 

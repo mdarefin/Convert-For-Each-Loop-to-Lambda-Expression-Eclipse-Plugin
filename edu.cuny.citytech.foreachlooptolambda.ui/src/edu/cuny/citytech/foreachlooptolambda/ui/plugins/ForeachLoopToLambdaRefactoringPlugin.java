@@ -1,13 +1,13 @@
-package edu.cuny.citytech.defaultrefactoring.ui.plugins;
+package edu.cuny.citytech.foreachlooptolambda.ui.plugins;
 
 import org.osgi.framework.BundleContext;
 
-import edu.cuny.citytech.defaultrefactoring.ui.descriptors.MigrateSkeletalImplementationToInterfaceRefactoringDescriptor;
+import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
 import edu.cuny.citytech.refactoring.common.RefactoringPlugin;
 
-public class MigrateSkeletalImplementationToInterfaceRefactoringPlugin extends RefactoringPlugin {
+public class ForeachLoopToLambdaRefactoringPlugin extends RefactoringPlugin {
 	
-	private static MigrateSkeletalImplementationToInterfaceRefactoringPlugin plugin;
+	private static ForeachLoopToLambdaRefactoringPlugin plugin;
 	
 	public static RefactoringPlugin getDefault() {
 		return plugin;
@@ -30,6 +30,6 @@ public class MigrateSkeletalImplementationToInterfaceRefactoringPlugin extends R
 	 */
 	@Override
 	protected String getRefactoringId() {
-		return MigrateSkeletalImplementationToInterfaceRefactoringDescriptor.REFACTORING_ID;
+		return ForeachLoopToLambdaRefactoringDescriptor.REFACTORING_ID;
 	}
 }
