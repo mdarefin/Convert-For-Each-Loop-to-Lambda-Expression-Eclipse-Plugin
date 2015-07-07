@@ -7,7 +7,7 @@
   <packaging>pom</packaging>
   <modules>
     <module>edu.cuny.citytech.foreachlooptolambda.ui</module>
-    <module>edu.cuny.citytech.foreachlooptolambda.tests</module>
+    <module>edu.cuny.citytech.foreachlooptolambda.ui.tests</module>
   </modules>
   <properties>
     <tycho-version>0.23.0</tycho-version>

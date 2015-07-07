@@ -6,7 +6,7 @@
     <artifactId>parent</artifactId>
     <version>1.0.0</version>
   </parent>
-  <artifactId>edu.cuny.citytech.foreachlooptolambda.tests</artifactId>
+  <artifactId>edu.cuny.citytech.foreachlooptolambda.ui.tests</artifactId>
   <packaging>eclipse-test-plugin</packaging>
   <profiles>
     <profile>
