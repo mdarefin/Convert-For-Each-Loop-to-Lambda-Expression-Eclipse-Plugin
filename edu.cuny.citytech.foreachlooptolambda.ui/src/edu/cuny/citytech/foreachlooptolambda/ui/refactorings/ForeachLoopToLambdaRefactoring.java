@@ -1,15 +1,12 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.jdt.core.Flags;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
@@ -51,86 +48,27 @@ public class ForeachLoopToLambdaRefactoring extends
 
 	@Override
 	public String getName() {
+		//TODO: Please rename.
 		return Messages.MigrateSkeletalImplementationToInferfaceRefactoring_Name;
 	}
 
 	@Override
 	public RefactoringStatus checkInitialConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
+		// TODO Empty for now.
 		final RefactoringStatus status = new RefactoringStatus();
-		// TODO Probably should make sure that the enclosing type implements an
-		// interface.
-		// TODO Can't be a static method (for now).
-		// TODO Can't be part of an annotation (at least for now; this should be
-		// checked on the declaring type).
-		// TODO No enum methods.
-		try {
-			pm.beginTask(
-					Messages.MigrateSkeletalImplementationToInferfaceRefactoring_CheckingPreconditions,
-					methods.size());
-
-			if (this.methods.isEmpty())
-				status.addFatalError(Messages.MigrateSkeletalImplementationToInferfaceRefactoring_MethodsNotSpecified);
-			else {
-				for (Iterator<IMethod> iterator = methods.iterator(); iterator
-						.hasNext();) {
-					IMethod method = iterator.next();
-
-					if (!method.exists()) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_MethodDoesNotExist,
-								method, iterator, status, pm);
-						iterator.remove();
-						pm.worked(1);
-					} else if (method.isBinary() || method.isReadOnly()) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_CantChangeMethod,
-								method, iterator, status, pm);
-						iterator.remove();
-						pm.worked(1);
-					} else if (!method.isStructureKnown()) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_CUContainsCompileErrors,
-								method, iterator, status, pm);
-					} else if (method.isConstructor()) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_NoConstructors,
-								method, iterator, status, pm);
-					} else if (method.getAnnotations().length > 0) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_NoAnnotations,
-								method, iterator, status, pm);
-					} else if (Flags.isStatic(method.getFlags())) {
-						removeMethod(
-								Messages.MigrateSkeletalImplementationToInferfaceRefactoring_NoStaticMethods,
-								method, iterator, status, pm);
-					}
-				}
-			}
-
-			if (this.methods.isEmpty())
-				status.addError(Messages.MigrateSkeletalImplementationToInferfaceRefactoring_PreconditionFailed);
-
-		} finally {
-			pm.done();
-		}
-
 		return status;
-	}
-
-	private static void removeMethod(String message, IMethod method,
-			Iterator<IMethod> iterator, final RefactoringStatus status,
-			IProgressMonitor pm) {
-		status.addWarning(MessageFormat.format(message, method.getElementName()));
-		iterator.remove();
-		pm.worked(1);
 	}
 
 	@Override
 	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		// TODO Auto-generated method stub
+		
+		for (IMethod iMethod : methods) {
+			// TODO Md: do your stuff here.
+			System.out.println(iMethod);
+		}
 		return status;
 	}
 
