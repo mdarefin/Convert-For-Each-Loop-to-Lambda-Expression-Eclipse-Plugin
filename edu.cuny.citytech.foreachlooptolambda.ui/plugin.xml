@@ -8,24 +8,66 @@
   </extension>
   <extension point="org.eclipse.ui.commands">
     <command categoryId="org.eclipse.jdt.ui.category.refactoring"
-    description="%MigrateSkeletalImplementationToInterfaceDescription"
+    description="%ForEachLoopToLambdaDescription"
     id="org.eclipse.migrate.skeletal.implementation.to.interface.command"
-    name="%MigrateSkeletalImplementationToInterfaceLabel">
-    </command>
+    name="ForEachLoopToLambdaLabel"/>
   </extension>
+  
   <extension point="org.eclipse.ui.handlers">
     <handler class="edu.cuny.citytech.foreachlooptolambda.ui.handlers.ForeachLoopToLambdaHandler"
     commandId="org.eclipse.migrate.skeletal.implementation.to.interface.command">
 
-      <activeWhen>
-        <with variable="selection">
-          <iterate ifEmpty="false" operator="or">
-            <!-- [rk] TODO: We'll probably need a compilation unit here as well. #1 -->
-            <instanceof value="org.eclipse.jdt.core.IMethod">
-            </instanceof>
-          </iterate>
-        </with>
-      </activeWhen>
+       <activeWhen> 
+	      <with 
+	            variable="selection">
+	         <or> 
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.IField"> 
+		            </instanceof> 
+		         </iterate> 
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.IType"> 
+		            </instanceof> 
+		         </iterate>
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.ICompilationUnit"> 
+		            </instanceof> 
+		         </iterate>
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.IPackageFragment"> 
+		            </instanceof> 
+		         </iterate>
+		         
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.IPackageFragmentRoot"> 
+		            </instanceof> 
+		         </iterate>
+		         <iterate
+	                ifEmpty="false"
+	                operator="or"> 
+		            <instanceof 
+		                  value="org.eclipse.jdt.core.IJavaProject"> 
+		            </instanceof> 
+		         </iterate>
+	         </or>
+	      </with> 
+        </activeWhen> 
+        
     </handler>
   </extension>
   <extension point="org.eclipse.ui.menus">
