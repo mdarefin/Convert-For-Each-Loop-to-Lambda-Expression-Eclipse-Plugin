@@ -49,7 +49,7 @@ public class ForeachLoopToLambdaRefactoring extends
 	@Override
 	public String getName() {
 		//TODO: Please rename.
-		return Messages.MigrateSkeletalImplementationToInferfaceRefactoring_Name;
+		return Messages.ForEachLoopToLambdaRefactoring_Name;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class ForeachLoopToLambdaRefactoring extends
 
 		try {
 			pm.beginTask(
-					Messages.MigrateSkeletalImplementationToInferfaceRefactoring_CreatingChange,
+					Messages.ForEachLoopToLambdaRefactoring_CreatingChange,
 					1);
 
 			return new NullChange(getName());
