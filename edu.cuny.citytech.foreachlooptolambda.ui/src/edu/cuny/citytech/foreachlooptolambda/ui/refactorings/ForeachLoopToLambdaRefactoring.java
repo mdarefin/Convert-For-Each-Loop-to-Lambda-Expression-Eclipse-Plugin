@@ -7,7 +7,11 @@ import java.util.Set;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jface.text.Document;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -67,7 +71,12 @@ public class ForeachLoopToLambdaRefactoring extends
 		
 		for (IMethod iMethod : methods) {
 			// TODO Md: do your stuff here.
-			System.out.println(iMethod);
+			
+			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
+			
+//			 System.out.println("Method name " + iMethod.getElementName());
+//		     System.out.println("Signature " + iMethod.getSignature());
+//		     System.out.println("Return Type " + iMethod.getReturnType());
 		}
 		return status;
 	}

@@ -106,33 +106,14 @@ import org.eclipse.jdt.core.dom.*;
  		return visitNode(node);
  	}
 
- 	public boolean visit(AssertStatement node) {
- 		return true; // recursive eval
- 	}
- 	public boolean visit(WhileStatement node) {
- 		return true;
- 	}
- 	public boolean visit(SwitchStatement node) {
- 		return true;
- 	}
- 	public boolean visit(Block node) {
- 		return true; // recursive
- 	}
- 	public boolean visit(LabeledStatement node) {
- 		return true; // recursive
- 	}
- 	public boolean visit(SwitchCase node) {
- 		return true;
- 	}
+
  	public boolean visit(IfStatement node) {
  		return true;
  	}
  	public boolean visit(ForStatement node) {
  		return true;
  	}
- 	public boolean visit(DoStatement node) {
- 		return true;
- 	}
+ 	
  	public boolean visit(ThrowStatement node) {
  		return true;
  	}
@@ -146,12 +127,6 @@ import org.eclipse.jdt.core.dom.*;
  		return true;
  	}
  	
- 	public boolean visit(StringLiteral node) {
- 		return false; 	
- 	}
- 	public boolean visit(PrimitiveType node) {
- 		return false; 
- 	}
  	public boolean visit(NullLiteral node) {
  		return false;
  	}
@@ -161,42 +136,14 @@ import org.eclipse.jdt.core.dom.*;
  	public boolean visit(PackageDeclaration node) {
  		return false;
  	}
- 	public boolean visit(BlockComment node) {
- 		return false; 
- 	}
- 	public boolean visit(ImportDeclaration node) {
- 		return false;
- 	}
- 	public boolean visit(EmptyStatement node) {
- 		return false;
- 	}
- 	public boolean visit(TagElement node) {
- 		return false; // comments; don't care
- 	}
- 	public boolean visit(TextElement node) {
- 		return false; // comments; don't care
- 	}
- 	public boolean visit(BooleanLiteral node) {
- 		return false;
- 	}
- 	public boolean visit(BreakStatement node) {
- 		return false;
- 	}
+ 	
  	public boolean visit(ContinueStatement node) {
  		return false;
  	}
  	public boolean visit(Modifier node) {
  		return false;
  	}
- 	public boolean visit(Javadoc node) {
- 		return false;
- 	}
- 	public boolean visit(CharacterLiteral node) {
- 		return false;
- 	}
- 	public boolean visit(LineComment node) {
- 		return false;
- 	}
+ 	
  	public boolean visit(MethodRef node) {
  		return false; // comments
  	}
