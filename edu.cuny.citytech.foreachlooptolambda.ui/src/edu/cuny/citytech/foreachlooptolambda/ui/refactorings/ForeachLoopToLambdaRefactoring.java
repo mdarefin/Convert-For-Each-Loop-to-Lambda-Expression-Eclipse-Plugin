@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -69,12 +70,13 @@ public class ForeachLoopToLambdaRefactoring extends
 	}
 ///////////////////////////////////////////////////////////////////////////////
 	//adding the CompilationUnit to AST parser
-	private static CompilationUnit parse(ICompilationUnit unit) {
+	private static ASTNode parse(ICompilationUnit unit) {
 	    ASTParser parser = ASTParser.newParser(AST.JLS3);
 	    parser.setKind(ASTParser.K_COMPILATION_UNIT);
 	    parser.setSource(unit);
 	    parser.setResolveBindings(true);
-	    return (CompilationUnit) parser.createAST(null); // parse
+	    ASTNode nodes = (CompilationUnit) parser.createAST(null);
+	    return nodes; // parse
 	  }
 ///////////////////////////////////////////////////////////////////////////////
 	@Override
@@ -85,8 +87,8 @@ public class ForeachLoopToLambdaRefactoring extends
 		for (IMethod iMethod : methods) {
 			// TODO Md: do your stuff here.
 			
-//			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-//			lambdaVisit.visit(parse(iCompilationUnit));
+			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
+			
 			
 		}
 		return status;
