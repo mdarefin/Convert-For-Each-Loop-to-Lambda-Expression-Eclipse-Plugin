@@ -9,9 +9,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.text.Document;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -63,7 +63,16 @@ public class ForeachLoopToLambdaRefactoring extends
 		final RefactoringStatus status = new RefactoringStatus();
 		return status;
 	}
-
+///////////////////////////////////////////////////////////////////////////////
+	//adding the CompilationUnit to AST parser
+	private static CompilationUnit parse(ICompilationUnit unit) {
+	    ASTParser parser = ASTParser.newParser(AST.JLS3);
+	    parser.setKind(ASTParser.K_COMPILATION_UNIT);
+	    parser.setSource(unit);
+	    parser.setResolveBindings(true);
+	    return (CompilationUnit) parser.createAST(null); // parse
+	  }
+///////////////////////////////////////////////////////////////////////////////
 	@Override
 	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
@@ -73,7 +82,7 @@ public class ForeachLoopToLambdaRefactoring extends
 			// TODO Md: do your stuff here.
 			
 			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-			
+			parse(iCompilationUnit);
 //			 System.out.println("Method name " + iMethod.getElementName());
 //		     System.out.println("Signature " + iMethod.getSignature());
 //		     System.out.println("Return Type " + iMethod.getReturnType());
