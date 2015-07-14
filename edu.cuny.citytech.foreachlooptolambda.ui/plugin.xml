@@ -8,9 +8,9 @@
   </extension>
   <extension point="org.eclipse.ui.commands">
     <command categoryId="org.eclipse.jdt.ui.category.refactoring"
-    description="%ForEachLoopToLambdaDescription"
+    description="%AdvanceForLoopToLambdaDescription"
     id="org.eclipse.migrate.skeletal.implementation.to.interface.command"
-    name="AdvanceForLoopToLambda"/>
+    name="%AdvanceForLoopToLambda"> </command>
   </extension>
   
   <extension point="org.eclipse.ui.handlers">

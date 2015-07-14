@@ -12,11 +12,13 @@ import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
+import edu.cuny.citytech.foreachlooptolambda.ui.visitor.LambdaConversionVisitor;
 import edu.cuny.citytech.refactoring.common.Refactoring;
 
 /**
@@ -33,6 +35,8 @@ public class ForeachLoopToLambdaRefactoring extends
 	 */
 	private Set<IMethod> methods;
 
+	LambdaConversionVisitor lambdaVisit = new LambdaConversionVisitor();
+	
 	/**
 	 * Creates a new refactoring with the given methods to refactor.
 	 * 
@@ -45,7 +49,7 @@ public class ForeachLoopToLambdaRefactoring extends
 	}
 
 	/**
-	 * Default ctor.
+	 * Default constructor
 	 */
 	public ForeachLoopToLambdaRefactoring() {
 	}
@@ -82,7 +86,7 @@ public class ForeachLoopToLambdaRefactoring extends
 			// TODO Md: do your stuff here.
 			
 			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-			parse(iCompilationUnit);
+			lambdaVisit.visit(parse(iCompilationUnit));
 		}
 		return status;
 	}
