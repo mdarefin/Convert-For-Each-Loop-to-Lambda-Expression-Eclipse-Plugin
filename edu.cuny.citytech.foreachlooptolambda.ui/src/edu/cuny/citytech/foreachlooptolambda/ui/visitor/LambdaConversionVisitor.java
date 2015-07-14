@@ -1,90 +1,18 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.visitor;
 
 import org.eclipse.jdt.core.dom.*;
-import org.eclipse.jdt.core.IMethod;
-
-
 
  public class LambdaConversionVisitor extends ASTVisitor {
- 	private IMethod mainMeth;
- 	private int numCalls = 0;
- 	private int numNodes = 0;
- 	
- 	public LambdaConversionVisitor (){
- 		super();
- 	}
- 	
- 	//---
- 	//This returns the number of nodes that was encountered by
- 	//this visitor
- 	//---
- 	public int getNumberOfNodes(){
- 		return this.numNodes;
- 	}
- 	
- 	//---
- 	//This returns the number of method invocations
- 	//counted by this visitor
- 	//----
- 	public int getNumberOfMethodCalls(){
- 		return this.numCalls;
- 	}
- 	
-
- 
- 	public void preVisit(ASTNode node) {
- 		super.preVisit(node);
- 	}	
- 	public void postVisit(ASTNode node) {
- 		this.numNodes++;
- 		super.postVisit(node);
- 	}
+	 
  	public boolean visitNode(ASTNode node) {
  		return true;
  	}
  	
- 	// ======================================================
+ 	public void postVisit(ASTNode node){
+ 		super.postVisit(node);
+ 	}
  	
- 	
- 	public boolean visit(AnonymousClassDeclaration node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ArrayAccess node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ArrayCreation node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ArrayInitializer node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ArrayType node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(Assignment node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(CastExpression node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(CatchClause node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ClassInstanceCreation node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(CompilationUnit node) {
- 		return visitNode(node);
- 	}
- 	public boolean visit(ConditionalExpression node) {
- 		return visitNode(node);
- 	}
- 	//---
- 	//We are going to count constructors as 
- 	//methods thus we need to increment numCalls
- 	//---
  	public boolean visit(ConstructorInvocation node) {
- 		this.numCalls++;
  		return visitNode(node);
  	}
 
@@ -112,7 +40,6 @@ import org.eclipse.jdt.core.IMethod;
  	//this is one method call for this class file
  	//---
  	public boolean visit(MethodInvocation node) {
- 		this.numCalls++;
  		return visitNode(node);
  	}
  	public boolean visit(ParenthesizedExpression node) {
@@ -146,7 +73,6 @@ import org.eclipse.jdt.core.IMethod;
  	//Yup we're counting calls to super() as well
  	//---
  	public boolean visit(SuperConstructorInvocation node) {
- 		this.numCalls++;
  		return visitNode(node);
  	}
  	public boolean visit(SuperFieldAccess node) {
@@ -156,7 +82,6 @@ import org.eclipse.jdt.core.IMethod;
  	//super.X() counts as well
  	//---
  	public boolean visit(SuperMethodInvocation node) {
- 		this.numCalls++;
  		return visitNode(node);
  	}
  	public boolean visit(ThisExpression node) {
@@ -282,43 +207,4 @@ import org.eclipse.jdt.core.IMethod;
  		return false; // comments
  	}
  	
- 	public boolean visit(AnnotationTypeDeclaration node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(AnnotationTypeMemberDeclaration node) {
- 		return false; // 1.5 
- 	}
- 	public boolean visit(WildcardType node) {
- 		return false; // Java2 1.5
- 	}
- 	public boolean visit(SingleMemberAnnotation node) {
- 		return false; // Java2 1.5
- 	}
- 	public boolean visit(ParameterizedType node) {
- 		return false;
- 	}
- 	public boolean visit(EnhancedForStatement node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(MarkerAnnotation node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(NormalAnnotation node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(TypeParameter node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(MemberValuePair node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(EnumConstantDeclaration node) {
- 		return false; // 1.5
- 	}
- 	public boolean visit(EnumDeclaration node) {
- 		return false; // 1.5
- 	}
-
- 	// There are corresponding endVisit methods
- 		
  }
