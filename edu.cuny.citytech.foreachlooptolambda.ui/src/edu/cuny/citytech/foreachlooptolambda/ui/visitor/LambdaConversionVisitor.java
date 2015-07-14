@@ -34,7 +34,7 @@ import org.eclipse.jdt.core.dom.*;
  	public boolean visit(MethodDeclaration node) {
  		return visitNode(node);
  	}
- 	
+ 
  	//---
  	//This node is of type MethodInvocation thus
  	//this is one method call for this class file
@@ -110,16 +110,21 @@ import org.eclipse.jdt.core.dom.*;
  	public boolean visit(IfStatement node) {
  		return true;
  	}
+ 
  	public boolean visit(ForStatement node) {
- 		return true;
+	
+		return true;
+		}
+ 	
+	//visiting for-each loop 
+ 	public boolean visit(EnhancedForStatement node){
+ 		return super.visit(node);
  	}
  	
  	public boolean visit(ThrowStatement node) {
  		return true;
  	}
- 	public boolean visit(SynchronizedStatement node) {
- 		return true;
- 	}
+
  	public boolean visit(TryStatement node) {
  		return true;
  	}

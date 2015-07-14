@@ -83,9 +83,6 @@ public class ForeachLoopToLambdaRefactoring extends
 			
 			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
 			parse(iCompilationUnit);
-//			 System.out.println("Method name " + iMethod.getElementName());
-//		     System.out.println("Signature " + iMethod.getSignature());
-//		     System.out.println("Return Type " + iMethod.getReturnType());
 		}
 		return status;
 	}
