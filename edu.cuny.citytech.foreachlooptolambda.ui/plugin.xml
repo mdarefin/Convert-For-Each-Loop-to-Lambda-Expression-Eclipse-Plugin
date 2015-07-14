@@ -10,7 +10,7 @@
     <command categoryId="org.eclipse.jdt.ui.category.refactoring"
     description="%AdvanceForLoopToLambdaDescription"
     id="org.eclipse.migrate.skeletal.implementation.to.interface.command"
-    name="%AdvanceForLoopToLambda"> </command>
+    name="AdvanceForLoopToLambda"/> 
   </extension>
   
   <extension point="org.eclipse.ui.handlers">

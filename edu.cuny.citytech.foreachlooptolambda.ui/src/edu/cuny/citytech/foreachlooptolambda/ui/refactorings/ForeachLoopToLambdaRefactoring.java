@@ -85,8 +85,9 @@ public class ForeachLoopToLambdaRefactoring extends
 		for (IMethod iMethod : methods) {
 			// TODO Md: do your stuff here.
 			
-			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-			lambdaVisit.visit(parse(iCompilationUnit));
+//			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
+//			lambdaVisit.visit(parse(iCompilationUnit));
+			
 		}
 		return status;
 	}
