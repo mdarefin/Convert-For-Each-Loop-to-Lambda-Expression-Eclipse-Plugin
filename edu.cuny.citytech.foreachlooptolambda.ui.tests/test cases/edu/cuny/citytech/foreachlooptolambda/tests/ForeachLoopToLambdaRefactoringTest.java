@@ -14,14 +14,14 @@ import org.eclipse.jdt.ui.tests.refactoring.RefactoringTest;
  *         Khatchadourian</a>
  *
  */
-public class MigrateSkeletalImplementationToInterfaceRefactoringTest extends
+public class ForeachLoopToLambdaRefactoringTest extends
 		RefactoringTest {
 
-	private static final Class<MigrateSkeletalImplementationToInterfaceRefactoringTest> clazz = MigrateSkeletalImplementationToInterfaceRefactoringTest.class;
+	private static final Class<ForeachLoopToLambdaRefactoringTest> clazz = ForeachLoopToLambdaRefactoringTest.class;
 
-	private static final String REFACTORING_PATH = "MigrateSkeletalImplementationToInterfaceTests/";
+	private static final String REFACTORING_PATH = "ForeachLoopToLambdaRefactoringTests/";
 
-	public MigrateSkeletalImplementationToInterfaceRefactoringTest(String name) {
+	public ForeachLoopToLambdaRefactoringTest(String name) {
 		super(name);
 	}
 
