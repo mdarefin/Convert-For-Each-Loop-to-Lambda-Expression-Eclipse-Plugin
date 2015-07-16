@@ -12,6 +12,8 @@ import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
@@ -21,29 +23,26 @@ import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitor.LambdaConversionVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
-
 /**
  * The activator class controls the plug-in life cycle
  * 
  * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
  *         Khatchadourian</a>
  */
-public class ForeachLoopToLambdaRefactoring extends
-		Refactoring {
+public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 	/**
 	 * The methods to refactor.
 	 */
 	private Set<IMethod> methods;
-	
+
 	/**
 	 * Creates a new refactoring with the given methods to refactor.
 	 * 
 	 * @param methods
 	 *            The methods to refactor.
 	 */
-	public ForeachLoopToLambdaRefactoring(
-			IMethod... methods) {
+	public ForeachLoopToLambdaRefactoring(IMethod... methods) {
 		this.methods = new HashSet<IMethod>(Arrays.asList(methods));
 	}
 
@@ -55,7 +54,7 @@ public class ForeachLoopToLambdaRefactoring extends
 
 	@Override
 	public String getName() {
-		//TODO: Please rename.
+		// TODO: Please rename.
 		return Messages.ForEachLoopToLambdaRefactoring_Name;
 	}
 
@@ -71,16 +70,20 @@ public class ForeachLoopToLambdaRefactoring extends
 	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
 		final RefactoringStatus status = new RefactoringStatus();
-		
+
 		for (IMethod iMethod : methods) {
 			// TODO Md: do your stuff here.
-			
+
 			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
 
 			// there may be a shared AST already parsed. Let's try to get that
 			// one.
-			CompilationUnit compilationUnit = RefactoringASTParser.parseWithASTProvider(iCompilationUnit, false,
-					new SubProgressMonitor(pm, 1));
+			CompilationUnit compilationUnit = RefactoringASTParser
+					.parseWithASTProvider(iCompilationUnit, false,
+							new SubProgressMonitor(pm, 1));
+
+			MethodDeclaration methodDeclarationNode = ASTNodeSearchUtil
+					.getMethodDeclarationNode(iMethod, compilationUnit);
 
 			// NOTE: compilationUnit is an AST node where as iCompilationUnit is
 			// a JavaElement (part of the Java model that represents a Java
@@ -90,7 +93,8 @@ public class ForeachLoopToLambdaRefactoring extends
 			ASTVisitor lambdaVisit = new LambdaConversionVisitor();
 
 			// have the AST node "accept" the visitor.
-			compilationUnit.accept(lambdaVisit);
+			methodDeclarationNode.accept(lambdaVisit);
+
 		}
 		return status;
 	}
@@ -101,8 +105,7 @@ public class ForeachLoopToLambdaRefactoring extends
 
 		try {
 			pm.beginTask(
-					Messages.ForEachLoopToLambdaRefactoring_CreatingChange,
-					1);
+					Messages.ForEachLoopToLambdaRefactoring_CreatingChange, 1);
 
 			return new NullChange(getName());
 		} finally {
