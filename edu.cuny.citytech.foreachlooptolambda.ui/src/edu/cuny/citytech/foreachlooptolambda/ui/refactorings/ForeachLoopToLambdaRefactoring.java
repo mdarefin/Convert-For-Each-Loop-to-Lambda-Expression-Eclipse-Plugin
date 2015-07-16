@@ -2,6 +2,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -10,17 +11,21 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
+import org.eclipse.ltk.core.refactoring.RefactoringStatusContext;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
-import edu.cuny.citytech.foreachlooptolambda.ui.visitor.LambdaConversionVisitor;
+import edu.cuny.citytech.foreachlooptolambda.ui.visitor.EnhancedForStatementVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
 /**
@@ -66,37 +71,75 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		return status;
 	}
 
+	private static Set<EnhancedForStatement> getEnhancedForStatements(
+			IMethod method, IProgressMonitor pm) throws JavaModelException {
+		ICompilationUnit iCompilationUnit = method.getCompilationUnit();
+
+		// there may be a shared AST already parsed. Let's try to get that
+		// one.
+		CompilationUnit compilationUnit = RefactoringASTParser
+				.parseWithASTProvider(iCompilationUnit, false,
+						new SubProgressMonitor(pm, 1));
+
+		// get the method declaration ASTNode.
+		MethodDeclaration methodDeclarationNode = ASTNodeSearchUtil
+				.getMethodDeclarationNode(method, compilationUnit);
+
+		final Set<EnhancedForStatement> statements = new LinkedHashSet<EnhancedForStatement>();
+
+		// extract all enhanced for loop statements in the method.
+		methodDeclarationNode.accept(new ASTVisitor() {
+
+			@Override
+			public boolean visit(EnhancedForStatement node) {
+				statements.add(node);
+				return super.visit(node);
+			}
+		});
+
+		return statements;
+	}
+
 	@Override
 	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
-		final RefactoringStatus status = new RefactoringStatus();
+		try {
+			final RefactoringStatus status = new RefactoringStatus();
+			for (IMethod method : methods) {
+				Set<EnhancedForStatement> statements = getEnhancedForStatements(
+						method, new SubProgressMonitor(pm, 1));
 
-		for (IMethod iMethod : methods) {
-			// TODO Md: do your stuff here.
+				IProgressMonitor subMonitor = new SubProgressMonitor(pm, statements.size());
+				
+				// check preconditions on each.
+				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s, subMonitor)));
+				pm.worked(1);
+			}
+			return status;
+		} finally {
+			pm.done();
+		}
+	}
 
-			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-
-			// there may be a shared AST already parsed. Let's try to get that
-			// one.
-			CompilationUnit compilationUnit = RefactoringASTParser
-					.parseWithASTProvider(iCompilationUnit, false,
-							new SubProgressMonitor(pm, 1));
-
-			MethodDeclaration methodDeclarationNode = ASTNodeSearchUtil
-					.getMethodDeclarationNode(iMethod, compilationUnit);
-
-			// NOTE: compilationUnit is an AST node where as iCompilationUnit is
-			// a JavaElement (part of the Java model that represents a Java
-			// project.
-
+	private static RefactoringStatus checkEnhancedForStatement(
+			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
+		try {
 			// create the visitor.
-			ASTVisitor lambdaVisit = new LambdaConversionVisitor();
+			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor();
 
 			// have the AST node "accept" the visitor.
-			methodDeclarationNode.accept(lambdaVisit);
-
+			enhancedForStatement.accept(visitor);
+			
+			if (visitor.containsBreak()) {
+				// TODO can we add context?
+				return RefactoringStatus.createWarningStatus("Enhanced for statement contains break.");
+			}
+			
+			pm.worked(1);
+			return new RefactoringStatus(); //passed.
+		} finally {
+			pm.done();
 		}
-		return status;
 	}
 
 	@Override
