@@ -14,6 +14,7 @@ import org.eclipse.jdt.ui.tests.refactoring.RefactoringTest;
  *         Khatchadourian</a>
  *
  */
+@SuppressWarnings("restriction")
 public class ForeachLoopToLambdaRefactoringTest extends
 		RefactoringTest {
 

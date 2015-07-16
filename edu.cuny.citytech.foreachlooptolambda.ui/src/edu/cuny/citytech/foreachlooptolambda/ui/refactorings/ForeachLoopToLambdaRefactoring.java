@@ -7,20 +7,23 @@ import java.util.Set;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitor.LambdaConversionVisitor;
-import edu.cuny.citytech.refactoring.common.Refactoring;
+import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -35,8 +38,6 @@ public class ForeachLoopToLambdaRefactoring extends
 	 * The methods to refactor.
 	 */
 	private Set<IMethod> methods;
-
-	LambdaConversionVisitor lambdaVisit = new LambdaConversionVisitor();
 	
 	/**
 	 * Creates a new refactoring with the given methods to refactor.
@@ -68,17 +69,7 @@ public class ForeachLoopToLambdaRefactoring extends
 		final RefactoringStatus status = new RefactoringStatus();
 		return status;
 	}
-///////////////////////////////////////////////////////////////////////////////
-	//adding the CompilationUnit to AST parser
-	private static ASTNode parse(ICompilationUnit unit) {
-	    ASTParser parser = ASTParser.newParser(AST.JLS3);
-	    parser.setKind(ASTParser.K_COMPILATION_UNIT);
-	    parser.setSource(unit);
-	    parser.setResolveBindings(true);
-	    ASTNode nodes = (CompilationUnit) parser.createAST(null);
-	    return nodes; // parse
-	  }
-///////////////////////////////////////////////////////////////////////////////
+
 	@Override
 	public RefactoringStatus checkFinalConditions(IProgressMonitor pm)
 			throws CoreException, OperationCanceledException {
@@ -88,8 +79,21 @@ public class ForeachLoopToLambdaRefactoring extends
 			// TODO Md: do your stuff here.
 			
 			ICompilationUnit iCompilationUnit = iMethod.getCompilationUnit();
-			
-			
+
+			// there may be a shared AST already parsed. Let's try to get that
+			// one.
+			CompilationUnit compilationUnit = RefactoringASTParser.parseWithASTProvider(iCompilationUnit, false,
+					new SubProgressMonitor(pm, 1));
+
+			// NOTE: compilationUnit is an AST node where as iCompilationUnit is
+			// a JavaElement (part of the Java model that represents a Java
+			// project.
+
+			// create the visitor.
+			ASTVisitor lambdaVisit = new LambdaConversionVisitor();
+
+			// have the AST node "accept" the visitor.
+			compilationUnit.accept(lambdaVisit);
 		}
 		return status;
 	}

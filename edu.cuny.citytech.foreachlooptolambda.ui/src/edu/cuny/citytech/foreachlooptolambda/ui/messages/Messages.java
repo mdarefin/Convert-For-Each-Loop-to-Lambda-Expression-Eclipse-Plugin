@@ -23,9 +23,6 @@ public class Messages extends NLS {
 	public static String ForEachLoopToLambdaRefactoring_RefactoringNotPossible;
 	public static String ForEachLoopToLambdaRefactoring_WrongType;
 	public static String ForEachLoopToLambdaRefactoring_CantChangeMethod;
-	public static String ForEachLoopToLambdaRefactoring_NoConstructors;
-	public static String ForEachLoopToLambdaRefactoring_NoAnnotations;
-	public static String ForEachLoopToLambdaRefactoring_NoStaticMethods;
 
 	static {
 		// initialize resource bundle
