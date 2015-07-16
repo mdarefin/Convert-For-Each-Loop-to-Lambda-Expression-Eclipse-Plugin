@@ -6,6 +6,7 @@ import org.eclipse.jdt.core.dom.*;
 
 	//visiting for-each loop 
 	public boolean visit(EnhancedForStatement node) {
+		System.out.println(node);
 		return super.visit(node);
 	}
  }
