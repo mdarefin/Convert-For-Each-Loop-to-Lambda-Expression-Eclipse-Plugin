@@ -9,6 +9,7 @@ import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambda
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 import edu.cuny.citytech.refactoring.common.core.RefactoringDescriptor;
 
+
 /**
  * @author raffi
  *
@@ -16,7 +17,7 @@ import edu.cuny.citytech.refactoring.common.core.RefactoringDescriptor;
 public class ForeachLoopToLambdaRefactoringDescriptor
 		extends RefactoringDescriptor {
 
-	public static final String REFACTORING_ID = "edu.cuny.citytech.defaultrefactoring.migrate.skeletal.implementation.to.interface"; //$NON-NLS-1$
+	public static final String REFACTORING_ID = "org.eclipse.enhanced.forloop.to.lambda"; //$NON-NLS-1$
 
 	public ForeachLoopToLambdaRefactoringDescriptor(
 			String project, String description, String comment,

@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Eclipse Advance ForLoop to Lambda Refactoring Plugin
+Bundle-Name: Eclipse Enhanced For Loop to Lambda Refactoring Plugin
 Bundle-SymbolicName: edu.cuny.citytech.foreachlooptolambda.ui;singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: edu.cuny.citytech.foreachlooptolambda.ui.plugins.ForeachLoopToLambdaRefactoringPlugin

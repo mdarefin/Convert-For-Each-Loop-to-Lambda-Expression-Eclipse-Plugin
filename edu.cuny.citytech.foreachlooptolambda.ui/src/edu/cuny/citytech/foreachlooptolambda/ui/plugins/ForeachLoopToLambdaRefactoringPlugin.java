@@ -5,6 +5,7 @@ import org.osgi.framework.BundleContext;
 import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
 import edu.cuny.citytech.refactoring.common.ui.RefactoringPlugin;
 
+
 public class ForeachLoopToLambdaRefactoringPlugin extends RefactoringPlugin {
 	
 	private static ForeachLoopToLambdaRefactoringPlugin plugin;

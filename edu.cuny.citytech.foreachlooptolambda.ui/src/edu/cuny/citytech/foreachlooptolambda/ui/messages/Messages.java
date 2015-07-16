@@ -10,7 +10,7 @@ import org.eclipse.osgi.util.NLS;
  *
  */
 public class Messages extends NLS {
-	private static final String BUNDLE_NAME = "edu.cuny.citytech.defaultrefactoring.ui.messages.messages"; //$NON-NLS-1$
+	private static final String BUNDLE_NAME = "edu.cuny.citytech.foreachlooptolambda.ui.messages.messages"; //$NON-NLS-1$
 
 	public static String ForEachLoopToLambdaRefactoring_MethodsNotSpecified;
 	public static String ForEachLoopToLambdaRefactoring_Name;

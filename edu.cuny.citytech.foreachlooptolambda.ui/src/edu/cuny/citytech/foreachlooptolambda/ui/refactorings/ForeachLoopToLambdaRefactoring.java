@@ -10,12 +10,8 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
@@ -24,6 +20,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitor.LambdaConversionVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
+
 
 /**
  * The activator class controls the plug-in life cycle

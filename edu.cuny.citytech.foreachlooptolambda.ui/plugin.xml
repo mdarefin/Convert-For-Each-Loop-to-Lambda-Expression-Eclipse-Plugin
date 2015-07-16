@@ -4,86 +4,44 @@
   <extension point="org.eclipse.ltk.core.refactoring.refactoringContributions">
 
     <contribution class="edu.cuny.citytech.foreachlooptolambda.ui.contributions.ForeachLoopToLambdaRefactoringContribution"
-    id="org.eclipse.advance.forloop.to.lambda.contribution" />
+    id="org.eclipse.enhanced.forloop.to.lambda.contribution" />
   </extension>
   <extension point="org.eclipse.ui.commands">
     <command categoryId="org.eclipse.jdt.ui.category.refactoring"
-    description="%AdvanceForLoopToLambdaDescription"
-    id="org.eclipse.advance.forloop.to.lambda.command"
-    name="AdvanceForLoopToLambda"/> 
+    description="Convert all enhanced for loops in this element to corresponding lambda expressions."
+    id="org.eclipse.enhanced.forloop.to.lambda.command"
+    name="Convert Enhanced For Loop To Lambda"/> 
   </extension>
   
   <extension point="org.eclipse.ui.handlers">
     <handler class="edu.cuny.citytech.foreachlooptolambda.ui.handlers.ForeachLoopToLambdaHandler"
-    commandId="org.eclipse.advance.forloop.to.lambda.command">
+    commandId="org.eclipse.enhanced.forloop.to.lambda.command">
 
        <activeWhen> 
-	      <with 
-	            variable="selection">
-	         <or> 
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.IField"> 
-		            </instanceof> 
-		         </iterate> 
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.IType"> 
-		            </instanceof> 
-		         </iterate>
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.ICompilationUnit"> 
-		            </instanceof> 
-		         </iterate>
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.IPackageFragment"> 
-		            </instanceof> 
-		         </iterate>
-		         
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.IPackageFragmentRoot"> 
-		            </instanceof> 
-		         </iterate>
-		         <iterate
-	                ifEmpty="false"
-	                operator="or"> 
-		            <instanceof 
-		                  value="org.eclipse.jdt.core.IJavaProject"> 
-		            </instanceof> 
-		         </iterate>
-	         </or>
-	      </with> 
-        </activeWhen> 
-        
+	      <with variable="selection">
+          <iterate ifEmpty="false" operator="or">
+            <!-- [rk] TODO: We'll probably need a compilation unit here as well. #1 -->
+            <instanceof value="org.eclipse.jdt.core.IMethod">
+            </instanceof>
+          </iterate>
+        </with>
+      </activeWhen>  
     </handler>
   </extension>
   <extension point="org.eclipse.ui.menus">
     <!-- [rk] Doesn't seem to be working -->
     <menuContribution locationURI="menu:org.eclipse.jdt.ui.refactoring.menu?after=additions">
 
-      <command commandId="org.eclipse.advance.forloop.to.lambda.command"
+      <command commandId="org.eclipse.enhanced.forloop.to.lambda.command"
       mnemonic="S"
-      id="org.eclipse.advance.forloop.to.lambda.menus.command">
+      id="org.eclipse.enhanced.forloop.to.lambda.menus.command">
 
         <visibleWhen checkEnabled="true"></visibleWhen>
       </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.jdt.ui.refactoring.menu?after=additions">
 
-      <command commandId="org.eclipse.advance.forloop.to.lambda.command"
+      <command commandId="org.eclipse.enhanced.forloop.to.lambda.command"
       style="push">
         <visibleWhen checkEnabled="true"></visibleWhen>
       </command>
