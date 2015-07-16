@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.jdt.ui,
  org.eclipse.jface.text,
  org.eclipse.core.resources,
- edu.cuny.citytech.refactoring.common
+ edu.cuny.citytech.refactoring.common.core,
+ edu.cuny.citytech.refactoring.common.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ClassPath: .

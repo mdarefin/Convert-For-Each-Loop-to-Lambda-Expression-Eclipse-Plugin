@@ -3,7 +3,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.plugins;
 import org.osgi.framework.BundleContext;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
-import edu.cuny.citytech.refactoring.common.RefactoringPlugin;
+import edu.cuny.citytech.refactoring.common.ui.RefactoringPlugin;
 
 public class ForeachLoopToLambdaRefactoringPlugin extends RefactoringPlugin {
 	
