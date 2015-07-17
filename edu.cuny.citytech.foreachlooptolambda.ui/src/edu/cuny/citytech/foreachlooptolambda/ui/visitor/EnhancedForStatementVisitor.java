@@ -12,7 +12,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredContinueStatement;
 	private boolean encounteredReturnStatement;
 	private boolean encounteredException;
-	private int returnCount = 1;
+	private int returnCount = 0;
 
 	@Override
 	public boolean visit(BreakStatement node) {
@@ -28,9 +28,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(ReturnStatement node) {
+		returnCount++;
 		if(returnCount > 1)
 			this.encounteredReturnStatement = true;
-		returnCount++;
+		
 		return super.visit(node);
 	}
 	//checking for exceptions
