@@ -5,7 +5,7 @@ import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.omg.CORBA.ExceptionList;
+import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
@@ -35,10 +35,16 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	//checking for exceptions
-	public boolean visit(CatchClause node) {
+	public boolean visit(ThrowStatement node) {   
 		this.encounteredException = true;
 		return super.visit(node);
 	}
+	
+	public boolean visit(CatchClause node) {   
+		this.encounteredException = true;
+		return super.visit(node);
+	}
+
 
 	public boolean containsBreak() {
 		return this.encounteredBreakStatement;
