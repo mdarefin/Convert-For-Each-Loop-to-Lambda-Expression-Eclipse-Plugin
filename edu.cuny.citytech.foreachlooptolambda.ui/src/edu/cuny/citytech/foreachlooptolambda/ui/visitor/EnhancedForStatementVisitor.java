@@ -47,11 +47,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return encounteredContinueStatement;
 	}
 
-	public boolean checkMultipleReturn() {
+	public boolean containsMultipleReturn() {
 		return encounteredReturnStatement;
 	}
 
-	public boolean checkException() {
+	public boolean containsException() {
 		return encounteredException;
 	}
 }
