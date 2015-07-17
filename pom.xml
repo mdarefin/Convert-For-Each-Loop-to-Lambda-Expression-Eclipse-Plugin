@@ -96,14 +96,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.eluder.coveralls</groupId>
-        <artifactId>coveralls-maven-plugin</artifactId>
-        <version>3.1.0</version>
-        <configuration>
-          <repoToken>M6NNDQJpE5AwYbFEVeryopr5Qcfb15O6V</repoToken>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
         <version>0.7.5.201505241946</version>
