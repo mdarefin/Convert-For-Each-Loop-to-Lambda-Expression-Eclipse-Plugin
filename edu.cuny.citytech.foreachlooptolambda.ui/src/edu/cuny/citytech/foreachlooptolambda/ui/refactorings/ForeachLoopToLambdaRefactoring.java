@@ -16,13 +16,11 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
-import org.eclipse.ltk.core.refactoring.RefactoringStatusContext;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitor.EnhancedForStatementVisitor;
@@ -71,6 +69,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		return status;
 	}
 
+	//this method get the EnhancedForSrarement to check the precondition 
 	private static Set<EnhancedForStatement> getEnhancedForStatements(
 			IMethod method, IProgressMonitor pm) throws JavaModelException {
 		ICompilationUnit iCompilationUnit = method.getCompilationUnit();
@@ -121,6 +120,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		}
 	}
 
+	//Checking with the precondiiton, 
 	private static RefactoringStatus checkEnhancedForStatement(
 			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
 		try {
@@ -133,6 +133,11 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			if (visitor.containsBreak()) {
 				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains break.");
+			}
+			
+			if (visitor.containsContinue()) {
+				// TODO can we add context?
+				return RefactoringStatus.createWarningStatus("Enhanced for statement contains continue.");
 			}
 			
 			pm.worked(1);
