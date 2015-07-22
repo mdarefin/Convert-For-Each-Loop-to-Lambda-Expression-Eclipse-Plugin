@@ -2,10 +2,10 @@ package edu.cuny.citytech.foreachlooptolambda.ui.contributions;
 
 import java.util.Map;
 
+import org.eclipse.ltk.core.refactoring.RefactoringContribution;
 import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
-import edu.cuny.citytech.refactoring.common.core.RefactoringContribution;
 
 
 public class ForeachLoopToLambdaRefactoringContribution
