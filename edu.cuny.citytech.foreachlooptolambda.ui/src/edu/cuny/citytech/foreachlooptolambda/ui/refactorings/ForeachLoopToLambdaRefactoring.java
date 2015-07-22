@@ -149,6 +149,12 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
+			
+			if (visitor.containsCollection()) {
+				// TODO can we add context?
+				return RefactoringStatus.createWarningStatus("Enhanced for statement is not a part of collection class.");
+			}
+
 
 			
 			pm.worked(1);
