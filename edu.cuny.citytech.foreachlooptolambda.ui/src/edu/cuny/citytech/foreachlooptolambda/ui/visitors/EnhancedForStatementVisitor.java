@@ -67,7 +67,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return encounteredContinueStatement;
 	}
 
-	public boolean containsReturn() {
+	public boolean containsInvalidReturn() {
 		// TODO can we add context?
 		return encounteredInvalidReturnStatement;
 	}

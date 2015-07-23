@@ -138,8 +138,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains continue.");
 			}
 			
-			if (visitor.containsReturn()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains multiple return.");
+			if (visitor.containsInvalidReturn()) {
+				return RefactoringStatus.createWarningStatus("Enhanced for statement contains invalid return.");
 			}
 			
 			if (visitor.containsMultipleReturn()) {
