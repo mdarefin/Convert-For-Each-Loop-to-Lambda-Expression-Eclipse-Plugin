@@ -1,4 +1,4 @@
-package edu.cuny.citytech.foreachlooptolambda.ui.visitor;
+package edu.cuny.citytech.foreachlooptolambda.ui.visitors;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -6,7 +6,6 @@ import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.ThisExpression;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
@@ -14,7 +13,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredContinueStatement;
 	private boolean encounteredReturnStatement;
 	private boolean encounteredException;
-	private boolean encounteredCollection;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
 
@@ -40,13 +38,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
-	//checking if the expression are part of collection 
-		public boolean visit(ThisExpression node) {   
-			if(node instanceof java.util.Collection ){
-				this.encounteredCollection = true;
-			}
-			return super.visit(node);
-		}	
+	//checking if the expression are part of collection TODO code here	
 	
 	//checking for exceptions
 	public boolean visit(ThrowStatement node) {   
@@ -78,11 +70,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean containsException() {
 		// TODO can we add context?
 		return encounteredException;
-	}
-	
-	public boolean containsCollection() {
-		// TODO can we add context?
-		return encounteredCollection;
 	}
 	
 	public boolean containsNEFs() {
