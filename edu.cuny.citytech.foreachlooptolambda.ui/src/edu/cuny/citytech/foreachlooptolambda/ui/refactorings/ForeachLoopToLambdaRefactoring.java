@@ -23,7 +23,7 @@ import org.eclipse.ltk.core.refactoring.NullChange;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
-import edu.cuny.citytech.foreachlooptolambda.ui.visitor.EnhancedForStatementVisitor;
+import edu.cuny.citytech.foreachlooptolambda.ui.visitors.EnhancedForStatementVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
 /**
@@ -146,9 +146,6 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
 			
-			if (visitor.containsCollection()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement is not a part of collection class.");
-			}
 			
 			pm.worked(1);
 			return new RefactoringStatus(); //passed.
