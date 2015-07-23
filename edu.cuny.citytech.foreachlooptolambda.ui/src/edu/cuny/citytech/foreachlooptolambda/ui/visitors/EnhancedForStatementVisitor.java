@@ -11,7 +11,7 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
 	private boolean encounteredContinueStatement;
-	private boolean encounteredReturnStatement;
+	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredException;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
@@ -31,14 +31,19 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	//checking if returnStatement is boolean, not null and has only one return 
 	@Override
 	public boolean visit(ReturnStatement node) {
-		ASTNode expression = node.getExpression();
+		
 		returnCount++;
-		if(returnCount > 1 && expression != null && expression.equals(ASTNode.BOOLEAN_LITERAL))
-			this.encounteredReturnStatement = true;		
+		ASTNode expression = node.getExpression();
+		if(expression != null && expression.getNodeType() == ASTNode.BOOLEAN_LITERAL){
+				this.encounteredInvalidReturnStatement = true; 
+		}	
 		return super.visit(node);
 	}
 	
-	//checking if the expression are part of collection TODO code here	
+	
+	//checking if the expression are part of collection TODO code here
+	//
+	//&& expression != null && expression.equals(ASTNode.BOOLEAN_LITERAL)
 	
 	//checking for exceptions
 	public boolean visit(ThrowStatement node) {   
@@ -64,7 +69,12 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	public boolean containsReturn() {
 		// TODO can we add context?
-		return encounteredReturnStatement;
+		return encounteredInvalidReturnStatement;
+	}
+	
+
+	public boolean containsMultipleReturn() {
+		return returnCount > 1;
 	}
 
 	public boolean containsException() {
