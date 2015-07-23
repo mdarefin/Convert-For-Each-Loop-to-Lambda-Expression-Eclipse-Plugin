@@ -61,26 +61,32 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 
 	public boolean containsBreak() {
+		// TODO can we add context?
 		return this.encounteredBreakStatement;
 	}
 
 	public boolean containsContinue() {
+		// TODO can we add context?
 		return encounteredContinueStatement;
 	}
 
 	public boolean containsReturn() {
+		// TODO can we add context?
 		return encounteredReturnStatement;
 	}
 
 	public boolean containsException() {
+		// TODO can we add context?
 		return encounteredException;
 	}
 	
 	public boolean containsCollection() {
+		// TODO can we add context?
 		return encounteredCollection;
 	}
 	
 	public boolean containsNEFs() {
+		// TODO can we add context?
 		return encounteredNonEffectivelyFinalVars;
 	}
 }
