@@ -131,31 +131,24 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			enhancedForStatement.accept(visitor);
 			
 			if (visitor.containsBreak()) {
-				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains break.");
 			}
 			
 			if (visitor.containsContinue()) {
-				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains continue.");
 			}
 			
 			if (visitor.containsReturn()) {
-				// Check the boolean type 
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains multiple return.");
 			}
 			
 			if (visitor.containsException()) {
-				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
 			
 			if (visitor.containsCollection()) {
-				// TODO can we add context?
 				return RefactoringStatus.createWarningStatus("Enhanced for statement is not a part of collection class.");
 			}
-
-
 			
 			pm.worked(1);
 			return new RefactoringStatus(); //passed.
