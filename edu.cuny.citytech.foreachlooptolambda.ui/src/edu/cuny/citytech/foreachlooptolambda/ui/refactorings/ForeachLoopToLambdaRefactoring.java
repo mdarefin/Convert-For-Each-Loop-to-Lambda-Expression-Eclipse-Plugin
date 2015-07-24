@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -85,7 +86,6 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				.getMethodDeclarationNode(method, compilationUnit);
 
 		final Set<EnhancedForStatement> statements = new LinkedHashSet<EnhancedForStatement>();
-
 		// extract all enhanced for loop statements in the method.
 		methodDeclarationNode.accept(new ASTVisitor() {
 
@@ -148,6 +148,10 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			
 			if (visitor.containsException()) {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
+			}
+			
+			if (visitor.containsEnhancedForLoop()) {
+				return RefactoringStatus.createWarningStatus("Enhanced for statement contains EmbeddedEnhancedForLoop.");
 			}
 			
 						
