@@ -36,7 +36,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		
 		returnCount++;
 		ASTNode expression = node.getExpression();
-		if(expression != null && expression.getNodeType() == ASTNode.BOOLEAN_LITERAL){
+		if(expression != null || expression.getNodeType() == ASTNode.BOOLEAN_LITERAL){
 				this.encounteredInvalidReturnStatement = true; 
 		}	
 		return super.visit(node);
