@@ -6,6 +6,8 @@ import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
+import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
@@ -47,6 +49,13 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
+	//this method will check any uncaught exceptions need to check line 55 getting error
+	public void checkException(){
+		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
+		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
+		if(thrownUncaughtException.length > 0)
+			this.encounteredThrownCheckedException = false;
+	}
 	public boolean containsBreak() {
 		return this.encounteredBreakStatement;
 	}
@@ -64,6 +73,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	}
 
 	public boolean containsException() {
+	//	checkException();
 		return encounteredThrownCheckedException;
 	}
 	
