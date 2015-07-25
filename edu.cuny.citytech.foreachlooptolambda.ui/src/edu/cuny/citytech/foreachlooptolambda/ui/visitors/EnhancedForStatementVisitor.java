@@ -2,6 +2,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.visitors;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ContinueStatement;
@@ -37,15 +38,13 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean visit(ReturnStatement node) {
 		//one more return statement encountered.
 		returnCount++;
-		ASTNode expression = node.getExpression();
-		if(expression != null || expression.getNodeType() == ASTNode.BOOLEAN_LITERAL){
-				this.encounteredInvalidReturnStatement = true; 
-		}	
-		return super.visit(node);
-	}
-	
 		
+		//examine what is being returned.
+		ASTNode expression = node.getExpression();
 	
+		//if there is a return statement, it must return a boolean literal.
+		if (expression == null || !(expression instanceof BooleanLiteral)) {
+				this.encounteredInvalidReturnStatement = true; 
 		}
 		
 	//checking if the expression are part of collection TODO code here
