@@ -4,17 +4,14 @@ import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
-import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
-	private boolean encounteredException;
+	private boolean encounteredThrownCheckedException;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
 
@@ -41,39 +38,24 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		
 		//examine what is being returned.
 		ASTNode expression = node.getExpression();
-	
+		
 		//if there is a return statement, it must return a boolean literal.
 		if (expression == null || !(expression instanceof BooleanLiteral)) {
 				this.encounteredInvalidReturnStatement = true; 
 		}
 		
-	//checking if the expression are part of collection TODO code here
-
+		return super.visit(node);
+	}
 	
-	//checking for exceptions
-	public boolean visit(ThrowStatement node) {   
-		this.encounteredException = true;
-		return super.visit(node);
-	}
-	//checking for exceptions
-	public boolean visit(CatchClause node) {   
-		this.encounteredException = true;
-		return super.visit(node);
-	}
-
-
 	public boolean containsBreak() {
-		// TODO can we add context?
 		return this.encounteredBreakStatement;
 	}
 
 	public boolean containsContinue() {
-		// TODO can we add context?
 		return encounteredContinueStatement;
 	}
 
 	public boolean containsInvalidReturn() {
-		// TODO can we add context?
 		return encounteredInvalidReturnStatement;
 	}
 
@@ -82,12 +64,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	}
 
 	public boolean containsException() {
-		// TODO can we add context?
-		return encounteredException;
+		return encounteredThrownCheckedException;
 	}
 	
 	public boolean containsNEFs() {
-		// TODO can we add context?
 		return encounteredNonEffectivelyFinalVars;
 	}
 }
