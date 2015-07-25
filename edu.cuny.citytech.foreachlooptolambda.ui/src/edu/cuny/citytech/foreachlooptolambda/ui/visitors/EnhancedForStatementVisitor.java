@@ -29,7 +29,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
-	//checking if returnStatement is boolean, not null and has only one return 
+	/** 
+	 * checking if returnStatement is boolean, not null and has only one return 
+	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.ReturnStatement)
+	 */
 	@Override
 	public boolean visit(ReturnStatement node) {
 		
