@@ -149,6 +149,11 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
 			
+			if (visitor.isIterbaleOverCollection()) {
+				return RefactoringStatus.createWarningStatus("Enhanced for statement doesn't iterate over Collection.");
+			}
+			
+			
 			pm.worked(1);
 			return new RefactoringStatus(); //passed.
 		} finally {
