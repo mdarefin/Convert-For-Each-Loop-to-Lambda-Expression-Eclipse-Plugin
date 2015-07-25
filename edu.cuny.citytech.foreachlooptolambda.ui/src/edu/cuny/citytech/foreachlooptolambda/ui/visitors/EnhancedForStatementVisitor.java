@@ -15,7 +15,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredException;
 	private boolean encounteredNonEffectivelyFinalVars;
-	private boolean encounteredEmbeddedLoop;
 	private int returnCount = 0;
 
 	@Override
@@ -42,19 +41,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
-	//checking if there is any embedded EnhancedForLoop
-	@Override
-	public boolean visit(EnhancedForStatement node) {
-		if(contains(node.getBody())){
-			this.encounteredEmbeddedLoop = true;
-		}
 		
-		return super.visit(node);
-	}
 	
-	//this method check if the EnhancedForLoop method body contain any embedded loop
-		public static boolean contains(ASTNode node){
-			return (node instanceof EnhancedForStatement);
 		}
 		
 	//checking if the expression are part of collection TODO code here
@@ -100,10 +88,4 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		// TODO can we add context?
 		return encounteredNonEffectivelyFinalVars;
 	}
-	
-	public boolean containsEmbeddedForLoop() {
-		// TODO can we add context?
-		return encounteredEmbeddedLoop;
-	}
-	
 }

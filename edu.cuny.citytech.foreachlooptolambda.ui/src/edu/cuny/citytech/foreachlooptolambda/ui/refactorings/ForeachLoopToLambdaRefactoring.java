@@ -149,11 +149,6 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
 			
-			if (visitor.containsEmbeddedForLoop()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains EmbeddedEnhancedForLoop.");
-			}
-			
-						
 			pm.worked(1);
 			return new RefactoringStatus(); //passed.
 		} finally {
