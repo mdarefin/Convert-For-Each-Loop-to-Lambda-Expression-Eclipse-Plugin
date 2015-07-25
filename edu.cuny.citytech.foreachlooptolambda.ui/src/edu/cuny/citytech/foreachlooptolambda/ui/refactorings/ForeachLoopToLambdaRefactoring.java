@@ -12,7 +12,6 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -150,7 +149,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
 			}
 			
-			if (visitor.containsEnhancedForLoop()) {
+			if (visitor.containsEmbeddedForLoop()) {
 				return RefactoringStatus.createWarningStatus("Enhanced for statement contains EmbeddedEnhancedForLoop.");
 			}
 			
