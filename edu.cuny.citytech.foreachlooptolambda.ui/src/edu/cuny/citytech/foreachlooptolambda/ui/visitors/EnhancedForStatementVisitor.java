@@ -35,7 +35,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	 */
 	@Override
 	public boolean visit(ReturnStatement node) {
-		
+		//one more return statement encountered.
 		returnCount++;
 		ASTNode expression = node.getExpression();
 		if(expression != null || expression.getNodeType() == ASTNode.BOOLEAN_LITERAL){
