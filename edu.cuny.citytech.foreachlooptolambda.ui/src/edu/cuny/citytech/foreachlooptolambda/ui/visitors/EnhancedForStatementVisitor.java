@@ -46,7 +46,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(EnhancedForStatement node) {
 		if(contains(node.getBody())){
-			return encounteredEmbeddedLoop = true;
+			this.encounteredEmbeddedLoop = true;
 		}
 		
 		return super.visit(node);
