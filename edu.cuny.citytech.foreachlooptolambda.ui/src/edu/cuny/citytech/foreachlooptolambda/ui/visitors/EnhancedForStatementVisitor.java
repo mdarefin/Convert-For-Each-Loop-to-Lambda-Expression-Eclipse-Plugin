@@ -58,7 +58,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
 		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
 		if(thrownUncaughtException.length > 0)
-			this.encounteredThrownCheckedException = false;
+			this.encounteredThrownCheckedException = true;
 	}
 	
 	//this method will check if the EnhancedForLoop iterate over collections
