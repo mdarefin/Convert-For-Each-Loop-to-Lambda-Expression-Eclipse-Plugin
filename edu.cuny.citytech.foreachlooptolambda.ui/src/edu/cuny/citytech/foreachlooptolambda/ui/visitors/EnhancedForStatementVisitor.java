@@ -26,56 +26,60 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.encounteredBreakStatement = true;
 		return super.visit(node);
 	}
-	
+
 	@Override
 	public boolean visit(ContinueStatement node) {
 		this.encounteredContinueStatement = true;
 		return super.visit(node);
 	}
-	
-	/** 
-	 * checking if returnStatement is boolean, not null and has only one return 
+
+	/**
+	 * checking if returnStatement is boolean, not null and has only one return
+	 * 
 	 * @see org.eclipse.jdt.core.dom.ASTVisitor#visit(org.eclipse.jdt.core.dom.ReturnStatement)
 	 */
 	@Override
 	public boolean visit(ReturnStatement node) {
-		//one more return statement encountered.
+		// one more return statement encountered.
 		returnCount++;
-		
-		//examine what is being returned.
+
+		// examine what is being returned.
 		ASTNode expression = node.getExpression();
-		
-		//if there is a return statement, it must return a boolean literal.
+
+		// if there is a return statement, it must return a boolean literal.
 		if (expression == null || !(expression instanceof BooleanLiteral)) {
-				this.encounteredInvalidReturnStatement = true; 
+			this.encounteredInvalidReturnStatement = true;
 		}
-		
+
 		return super.visit(node);
 	}
+
 	
-	//this method will check any uncaught exceptions need to check line 55 getting error
-	public void checkException(){
-		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
-		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
-		if(thrownUncaughtException.length > 0)
-			this.encounteredThrownCheckedException = true;
-	}
-	
-	//this method will check if the EnhancedForLoop iterate over collections
+
+	// this method will check if the EnhancedForLoop iterate over collections
 	@Override
 	public boolean visit(EnhancedForStatement node) {
-			
-		//examine what is being returned.
+
+		// examine what is being returned.
 		ASTNode expression = node.getExpression();
-		
-		//if there is a return statement, it must return a boolean literal.
+
+		// if there is a return statement, it must return a boolean literal.
 		if (!(expression instanceof Collection<?>)) {
-				 this.isInstanceOfCollection = true;  
+			this.isInstanceOfCollection = true;
 		}
-		
+
 		return super.visit(node);
 	}
-		
+	
+	// this method will check any uncaught exceptions 
+		public void checkException() {
+			ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
+			ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions
+					.getThrownUncaughtExceptions();
+			if (thrownUncaughtException.length > 0)
+				this.encounteredThrownCheckedException = true;
+		}
+
 	public boolean containsBreak() {
 		return this.encounteredBreakStatement;
 	}
@@ -93,10 +97,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	}
 
 	public boolean containsException() {
-	//	checkException();
+		// checkException();
 		return encounteredThrownCheckedException;
 	}
-	
+
 	public boolean containsNEFs() {
 		return encounteredNonEffectivelyFinalVars;
 	}
