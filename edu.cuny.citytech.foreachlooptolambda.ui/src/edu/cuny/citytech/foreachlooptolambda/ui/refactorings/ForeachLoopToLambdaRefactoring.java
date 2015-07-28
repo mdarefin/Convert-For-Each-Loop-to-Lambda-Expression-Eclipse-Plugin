@@ -18,6 +18,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
+import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -137,6 +139,16 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 		return isNotInstanceOfCollection;
 	}
+	
+	//getting any uncaught exception
+	public void checkException(){
+			ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
+			ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
+			if(thrownUncaughtException.length > 0){
+				
+			}
+		}
+
 
 	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(
