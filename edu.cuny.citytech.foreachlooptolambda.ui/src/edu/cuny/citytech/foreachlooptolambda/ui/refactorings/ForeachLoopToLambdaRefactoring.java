@@ -13,10 +13,11 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
+import org.eclipse.jdt.core.dom.Expression;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
 import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
@@ -81,7 +82,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		// there may be a shared AST already parsed. Let's try to get that
 		// one.
 		CompilationUnit compilationUnit = RefactoringASTParser
-				.parseWithASTProvider(iCompilationUnit, false,
+				.parseWithASTProvider(iCompilationUnit, true,
 						new SubProgressMonitor(pm, 1));
 
 		// get the method declaration ASTNode.
@@ -126,29 +127,32 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		}
 	}
 
-	//Checking if the EnhancedForLoop iterate over collection
+	// Checking if the EnhancedForLoop iterate over collection
 	private static boolean checkEnhancedForStatementIteratesOverCollection(
 			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
 		boolean isNotInstanceOfCollection = false;
 
-		ASTNode expression = enhancedForStatement.getExpression();
+		Expression expression = enhancedForStatement.getExpression();
+		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 
-		if (!(expression instanceof Collection<?>)) {
+		String className = nodeBindingType.getQualifiedName();
+
+		if (!(className.contains("java.util.Collection"))) {
 			isNotInstanceOfCollection = true;
 		}
 
 		return isNotInstanceOfCollection;
 	}
-	
-	//getting any uncaught exception
-	public void checkException(){
-			ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
-			ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
-			if(thrownUncaughtException.length > 0){
-				
-			}
-		}
 
+	// getting any uncaught exception
+	public void checkException() {
+		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
+		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions
+				.getThrownUncaughtExceptions();
+		if (thrownUncaughtException.length > 0) {
+
+		}
+	}
 
 	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(
