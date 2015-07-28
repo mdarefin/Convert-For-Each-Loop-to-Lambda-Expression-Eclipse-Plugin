@@ -1,6 +1,7 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -12,6 +13,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.JavaModelException;
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
@@ -69,7 +71,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		return status;
 	}
 
-	//this method get the EnhancedForSrarement to check the precondition 
+	// this method get the EnhancedForSrarement to check the precondition
 	private static Set<EnhancedForStatement> getEnhancedForStatements(
 			IMethod method, IProgressMonitor pm) throws JavaModelException {
 		ICompilationUnit iCompilationUnit = method.getCompilationUnit();
@@ -107,10 +109,13 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				Set<EnhancedForStatement> statements = getEnhancedForStatements(
 						method, new SubProgressMonitor(pm, 1));
 
-				IProgressMonitor subMonitor = new SubProgressMonitor(pm, statements.size());
-				
+				IProgressMonitor subMonitor = new SubProgressMonitor(pm,
+						statements.size());
+
 				// check preconditions on each.
-				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s, subMonitor)));
+				statements.stream().forEach(
+						s -> status.merge(checkEnhancedForStatement(s,
+								subMonitor)));
 				pm.worked(1);
 			}
 			return status;
@@ -119,7 +124,21 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		}
 	}
 
-	//Checking with the precondiiton, 
+	//Checking if the EnhancedForLoop iterate over collection
+	private static boolean checkEnhancedForStatementIteratesOverCollection(
+			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
+		boolean isNotInstanceOfCollection = false;
+
+		ASTNode expression = enhancedForStatement.getExpression();
+
+		if (!(expression instanceof Collection<?>)) {
+			isNotInstanceOfCollection = true;
+		}
+
+		return isNotInstanceOfCollection;
+	}
+
+	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(
 			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
 		try {
@@ -128,34 +147,40 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
-			
+
 			if (visitor.containsBreak()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains break.");
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement contains break.");
 			}
-			
+
 			if (visitor.containsContinue()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains continue.");
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement contains continue.");
 			}
-			
+
 			if (visitor.containsInvalidReturn()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains invalid return.");
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement contains invalid return.");
 			}
-			
+
 			if (visitor.containsMultipleReturn()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains multiple return.");
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement contains multiple return.");
 			}
-			
+
 			if (visitor.containsException()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement contains Exception.");
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement contains Exception.");
 			}
-			
-			if (visitor.isIterbaleOverCollection()) {
-				return RefactoringStatus.createWarningStatus("Enhanced for statement doesn't iterate over Collection.");
+
+			if (checkEnhancedForStatementIteratesOverCollection(
+					enhancedForStatement, pm)) {
+				return RefactoringStatus
+						.createWarningStatus("Enhanced for statement doesn't iterate over collecitons");
 			}
-			
-			
+
 			pm.worked(1);
-			return new RefactoringStatus(); //passed.
+			return new RefactoringStatus(); // passed.
 		} finally {
 			pm.done();
 		}
