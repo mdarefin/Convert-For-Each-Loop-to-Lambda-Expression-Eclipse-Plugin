@@ -1,16 +1,11 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.visitors;
 
-import java.util.Collection;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
-import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
@@ -18,7 +13,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
 	private boolean encounteredNonEffectivelyFinalVars;
-	private boolean isInstanceOfCollection;
 	private int returnCount = 0;
 
 	@Override
@@ -54,32 +48,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	
-
-	// this method will check if the EnhancedForLoop iterate over collections
-	@Override
-	public boolean visit(EnhancedForStatement node) {
-
-		// examine what is being returned.
-		ASTNode expression = node.getExpression();
-
-		// if there is a return statement, it must return a boolean literal.
-		if (!(expression instanceof Collection<?>)) {
-			this.isInstanceOfCollection = true;
-		}
-
-		return super.visit(node);
-	}
-	
-	// this method will check any uncaught exceptions 
-		public void checkException() {
-			ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
-			ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions
-					.getThrownUncaughtExceptions();
-			if (thrownUncaughtException.length > 0)
-				this.encounteredThrownCheckedException = true;
-		}
-
 	public boolean containsBreak() {
 		return this.encounteredBreakStatement;
 	}
@@ -103,10 +71,5 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	public boolean containsNEFs() {
 		return encounteredNonEffectivelyFinalVars;
-	}
-
-	public boolean isIterbaleOverCollection() {
-		// TODO Auto-generated method stub
-		return isInstanceOfCollection;
 	}
 }
