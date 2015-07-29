@@ -137,11 +137,11 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 
 		String className = nodeBindingType.getQualifiedName();
-		
+
 		System.out.println(className);
-		
+
 		final Set<String> collectionsClassName = new HashSet<String>();
-		
+
 		collectionsClassName.add("java.util.Collection");
 		collectionsClassName.add("java.util.List");
 		collectionsClassName.add("java.util.LinkedList");
@@ -150,16 +150,14 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		collectionsClassName.add("java.util.HashSet");
 		collectionsClassName.add("java.util.Map");
 		collectionsClassName.add("java.util.HashMap");
-		
-		
-		for (String name : collectionsClassName){
-			System.out.println(name +" instance of "+className.contains(name));
-			if((className.contains(name))){
+
+		for (String name : collectionsClassName) {
+			if ((className.contains(name))) {
 				isNotInstanceOfCollection = false;
 				break;
 			}
 		}
-		
+
 		return isNotInstanceOfCollection;
 	}
 
