@@ -1,10 +1,8 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -136,9 +134,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 
-		String className = nodeBindingType.getQualifiedName();
-
-		System.out.println(className);
+		String fullTypeName = nodeBindingType.getQualifiedName();
+		String typeName = fullTypeName.split("<")[0];
 
 		final Set<String> collectionsClassName = new HashSet<String>();
 
@@ -152,7 +149,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		collectionsClassName.add("java.util.HashMap");
 
 		for (String name : collectionsClassName) {
-			if ((className.contains(name))) {
+			if ((typeName.equals(name))) {
 				isNotInstanceOfCollection = false;
 				break;
 			}
