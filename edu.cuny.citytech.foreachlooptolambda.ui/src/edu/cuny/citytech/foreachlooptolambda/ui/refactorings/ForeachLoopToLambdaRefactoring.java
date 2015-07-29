@@ -1,9 +1,10 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -130,17 +131,35 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	// Checking if the EnhancedForLoop iterate over collection
 	private static boolean checkEnhancedForStatementIteratesOverCollection(
 			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
-		boolean isNotInstanceOfCollection = false;
+		boolean isNotInstanceOfCollection = true;
 
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 
 		String className = nodeBindingType.getQualifiedName();
-
-		if (!(className.contains("java.util.Collection"))) {
-			isNotInstanceOfCollection = true;
+		
+		System.out.println(className);
+		
+		final Set<String> collectionsClassName = new HashSet<String>();
+		
+		collectionsClassName.add("java.util.Collection");
+		collectionsClassName.add("java.util.List");
+		collectionsClassName.add("java.util.LinkedList");
+		collectionsClassName.add("java.util.LinkedHashSet");
+		collectionsClassName.add("java.util.Set");
+		collectionsClassName.add("java.util.HashSet");
+		collectionsClassName.add("java.util.Map");
+		collectionsClassName.add("java.util.HashMap");
+		
+		
+		for (String name : collectionsClassName){
+			System.out.println(name +" instance of "+className.contains(name));
+			if((className.contains(name))){
+				isNotInstanceOfCollection = false;
+				break;
+			}
 		}
-
+		
 		return isNotInstanceOfCollection;
 	}
 
@@ -192,7 +211,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			if (checkEnhancedForStatementIteratesOverCollection(
 					enhancedForStatement, pm)) {
 				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement doesn't iterate over collecitons");
+						.createWarningStatus("Enhanced for statement doesn't iterate over collecitons \n testing");
 			}
 
 			pm.worked(1);
