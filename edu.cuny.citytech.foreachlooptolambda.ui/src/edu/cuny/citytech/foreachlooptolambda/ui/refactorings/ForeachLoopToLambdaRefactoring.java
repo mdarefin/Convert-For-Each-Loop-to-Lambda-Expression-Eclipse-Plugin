@@ -178,37 +178,48 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
 
-			if (visitor.containsBreak()) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement contains break.");
-			}
+			if (visitor.containsBreak()
+					|| visitor.containsContinue()
+					|| visitor.containsInvalidReturn()
+					|| visitor.containsMultipleReturn()
+					|| visitor.containsException()
+					|| checkEnhancedForStatementIteratesOverCollection(
+							enhancedForStatement, pm)) {
+				final Set<String> warningStatement = new HashSet<String>();
+				if (visitor.containsBreak()) {
+					warningStatement
+							.add("Enhanced for statement contains break.\n");
+				}
 
-			if (visitor.containsContinue()) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement contains continue.");
-			}
+				if (visitor.containsContinue()) {
+					warningStatement
+							.add("Enhanced for statement contains continue.\n");
+				}
 
-			if (visitor.containsInvalidReturn()) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement contains invalid return.");
-			}
+				if (visitor.containsInvalidReturn()) {
+					warningStatement
+							.add("Enhanced for statement contains invalid return.\n");
+				}
 
-			if (visitor.containsMultipleReturn()) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement contains multiple return.");
-			}
+				if (visitor.containsMultipleReturn()) {
+					warningStatement
+							.add("Enhanced for statement contains multiple return.\n");
+				}
 
-			if (visitor.containsException()) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement contains Exception.");
-			}
+				if (visitor.containsException()) {
+					warningStatement
+							.add("Enhanced for statement contains Exception.\n");
+				}
 
-			if (checkEnhancedForStatementIteratesOverCollection(
-					enhancedForStatement, pm)) {
-				return RefactoringStatus
-						.createWarningStatus("Enhanced for statement doesn't iterate over collecitons \n testing");
-			}
+				if (checkEnhancedForStatementIteratesOverCollection(
+						enhancedForStatement, pm)) {
+					warningStatement
+							.add("Enhanced for statement doesn't iterate over collecitons \n");
 
+				}
+				String warning = String.join(", ", warningStatement);
+				return RefactoringStatus.createWarningStatus(warning);
+			}
 			pm.worked(1);
 			return new RefactoringStatus(); // passed.
 		} finally {
