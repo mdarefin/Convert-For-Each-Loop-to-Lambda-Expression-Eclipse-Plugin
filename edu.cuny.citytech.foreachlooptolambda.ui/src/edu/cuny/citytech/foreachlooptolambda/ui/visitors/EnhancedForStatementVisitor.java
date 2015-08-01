@@ -72,4 +72,5 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean containsNEFs() {
 		return encounteredNonEffectivelyFinalVars;
 	}
+	
 }

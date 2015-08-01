@@ -137,6 +137,10 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		String fullTypeName = nodeBindingType.getQualifiedName();
 		String typeName = fullTypeName.split("<")[0];
 
+		//debug with printing 
+		System.out.println(fullTypeName);
+		System.out.println(typeName);
+		
 		final Set<String> collectionsClassName = new HashSet<String>();
 
 		collectionsClassName.add("java.util.Collection");
@@ -188,36 +192,36 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				final Set<String> warningStatement = new HashSet<String>();
 				if (visitor.containsBreak()) {
 					warningStatement
-							.add("Enhanced for statement contains break.\n");
+							.add("Enhanced for statement contains break.");
 				}
 
 				if (visitor.containsContinue()) {
 					warningStatement
-							.add("Enhanced for statement contains continue.\n");
+							.add("Enhanced for statement contains continue.");
 				}
 
 				if (visitor.containsInvalidReturn()) {
 					warningStatement
-							.add("Enhanced for statement contains invalid return.\n");
+							.add("Enhanced for statement contains invalid return.");
 				}
 
 				if (visitor.containsMultipleReturn()) {
 					warningStatement
-							.add("Enhanced for statement contains multiple return.\n");
+							.add("Enhanced for statement contains multiple return.");
 				}
 
 				if (visitor.containsException()) {
 					warningStatement
-							.add("Enhanced for statement contains Exception.\n");
+							.add("Enhanced for statement contains Exception.");
 				}
 
 				if (checkEnhancedForStatementIteratesOverCollection(
 						enhancedForStatement, pm)) {
 					warningStatement
-							.add("Enhanced for statement doesn't iterate over collecitons \n");
+							.add("Enhanced for statement doesn't iterate over collecitons.");
 
 				}
-				String warning = String.join(", ", warningStatement);
+				String warning = String.join(" ", warningStatement);
 				return RefactoringStatus.createWarningStatus(warning);
 			}
 			pm.worked(1);
