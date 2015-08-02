@@ -10,7 +10,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
+import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
@@ -133,13 +136,26 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
+		
+		//getting java IJavaElement
+		IJavaElement nodeElementType = nodeBindingType.getJavaElement();
+		
+		//ITypeHierarchy superType and getting the interface from them.
+		ITypeHierarchy iTypeHeirchay;
+		try {
+			iTypeHeirchay = ((IType) nodeElementType).newSupertypeHierarchy(pm);
+			System.out.println(iTypeHeirchay);
+			IType[] iType = iTypeHeirchay.getAllInterfaces();
+			for (IType iType2 : iType) {
+				System.out.println(iType2);
+			}
+		} catch (JavaModelException e) {
+			e.printStackTrace();
+		}
+		
 
 		String fullTypeName = nodeBindingType.getQualifiedName();
 		String typeName = fullTypeName.split("<")[0];
-
-		//debug with printing 
-		System.out.println(fullTypeName);
-		System.out.println(typeName);
 		
 		final Set<String> collectionsClassName = new HashSet<String>();
 
@@ -158,6 +174,11 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				break;
 			}
 		}
+		
+		int [] list = {10,23,4,2,40,4};
+		
+		
+		
 
 		return isNotInstanceOfCollection;
 	}
@@ -219,8 +240,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 						enhancedForStatement, pm)) {
 					warningStatement
 							.add("Enhanced for statement doesn't iterate over collecitons.");
-
 				}
+				
 				String warning = String.join(" ", warningStatement);
 				return RefactoringStatus.createWarningStatus(warning);
 			}
