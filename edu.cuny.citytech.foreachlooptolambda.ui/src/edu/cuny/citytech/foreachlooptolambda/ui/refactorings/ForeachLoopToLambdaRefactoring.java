@@ -1,5 +1,6 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -23,6 +24,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
 import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
+import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -143,12 +145,9 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		//ITypeHierarchy superType and getting the interface from them.
 		ITypeHierarchy iTypeHeirchay;
 		try {
-			iTypeHeirchay = ((IType) nodeElementType).newSupertypeHierarchy(pm);
-			System.out.println(iTypeHeirchay);
+			iTypeHeirchay =  ((IType) nodeElementType).newSupertypeHierarchy(pm);//giving null pointer exception
 			IType[] iType = iTypeHeirchay.getAllInterfaces();
-			for (IType iType2 : iType) {
-				System.out.println(iType2);
-			}
+
 		} catch (JavaModelException e) {
 			e.printStackTrace();
 		}
@@ -175,11 +174,6 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			}
 		}
 		
-		int [] list = {10,23,4,2,40,4};
-		
-		
-		
-
 		return isNotInstanceOfCollection;
 	}
 
@@ -251,7 +245,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			pm.done();
 		}
 	}
-
+	
 	@Override
 	public Change createChange(IProgressMonitor pm) throws CoreException,
 			OperationCanceledException {
