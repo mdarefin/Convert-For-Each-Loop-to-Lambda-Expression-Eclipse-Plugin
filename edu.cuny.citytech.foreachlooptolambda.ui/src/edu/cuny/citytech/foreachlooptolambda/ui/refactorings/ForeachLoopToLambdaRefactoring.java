@@ -139,27 +139,13 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 		
-		//getting java IJavaElement
-		IJavaElement nodeElementType = nodeBindingType.getJavaElement();
-		
-		//ITypeHierarchy superType and getting the interface from them.
-		ITypeHierarchy iTypeHeirchay;
-		try {
-			iTypeHeirchay =  ((IType) nodeElementType).newSupertypeHierarchy(pm);//giving null pointer exception
-			IType[] iType = iTypeHeirchay.getAllInterfaces();
-
-		} catch (JavaModelException e) {
-			e.printStackTrace();
-		}
-		
-
-		String fullTypeName = nodeBindingType.getQualifiedName();
-		String typeName = fullTypeName.split("<")[0];
+		String typeName = nodeBindingType.getQualifiedName();
 		
 		final Set<String> collectionsClassName = new HashSet<String>();
 
 		collectionsClassName.add("java.util.Collection");
 		collectionsClassName.add("java.util.List");
+		collectionsClassName.add("java.util.ArrayList");
 		collectionsClassName.add("java.util.LinkedList");
 		collectionsClassName.add("java.util.LinkedHashSet");
 		collectionsClassName.add("java.util.Set");
@@ -168,7 +154,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		collectionsClassName.add("java.util.HashMap");
 
 		for (String name : collectionsClassName) {
-			if ((typeName.equals(name))) {
+			if ((typeName.startsWith(name))) {
 				isNotInstanceOfCollection = false;
 				break;
 			}
