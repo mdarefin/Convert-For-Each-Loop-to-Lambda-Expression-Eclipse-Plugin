@@ -77,19 +77,17 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// this method get the EnhancedForSrarement to check the precondition
-	private static Set<EnhancedForStatement> getEnhancedForStatements(
-			IMethod method, IProgressMonitor pm) throws JavaModelException {
+	private static Set<EnhancedForStatement> getEnhancedForStatements(IMethod method, IProgressMonitor pm)
+			throws JavaModelException {
 		ICompilationUnit iCompilationUnit = method.getCompilationUnit();
 
 		// there may be a shared AST already parsed. Let's try to get that
 		// one.
-		CompilationUnit compilationUnit = RefactoringASTParser
-				.parseWithASTProvider(iCompilationUnit, true,
-						new SubProgressMonitor(pm, 1));
+		CompilationUnit compilationUnit = RefactoringASTParser.parseWithASTProvider(iCompilationUnit, true,
+				new SubProgressMonitor(pm, 1));
 
 		// get the method declaration ASTNode.
-		MethodDeclaration methodDeclarationNode = ASTNodeSearchUtil
-				.getMethodDeclarationNode(method, compilationUnit);
+		MethodDeclaration methodDeclarationNode = ASTNodeSearchUtil.getMethodDeclarationNode(method, compilationUnit);
 
 		final Set<EnhancedForStatement> statements = new LinkedHashSet<EnhancedForStatement>();
 		// extract all enhanced for loop statements in the method.
@@ -111,16 +109,12 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		try {
 			final RefactoringStatus status = new RefactoringStatus();
 			for (IMethod method : methods) {
-				Set<EnhancedForStatement> statements = getEnhancedForStatements(
-						method, new SubProgressMonitor(pm, 1));
+				Set<EnhancedForStatement> statements = getEnhancedForStatements(method, new SubProgressMonitor(pm, 1));
 
-				IProgressMonitor subMonitor = new SubProgressMonitor(pm,
-						statements.size());
+				IProgressMonitor subMonitor = new SubProgressMonitor(pm, statements.size());
 
 				// check preconditions on each.
-				statements.stream().forEach(
-						s -> status.merge(checkEnhancedForStatement(s,
-								subMonitor)));
+				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s, subMonitor)));
 				pm.worked(1);
 			}
 			return status;
@@ -130,57 +124,60 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// Checking if the EnhancedForLoop iterate over collection
-	private static boolean checkEnhancedForStatementIteratesOverCollection(
-			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
+	private static boolean checkEnhancedForStatementIteratesOverCollection(EnhancedForStatement enhancedForStatement,
+			IProgressMonitor pm) {
 		boolean isNotInstanceOfCollection = true;
 
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
-		
-		//STEP 1:  getting java the element of the type, 
-		IType iTypeElement = (IType) nodeBindingType.getJavaElement();
-		//Debug Purpose: will be remove once code is done
-		System.out.println("This is ITypeElement "+iTypeElement);
-		
-		try {
-			//STEP 2:  getting java iTypeHeirchay, 
-			ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
-			//Debug Purpose: will be remove once code is done
-			System.out.println("this is ITypeHeirchay "+iTypeHeirchay);
-			//STEP 3:
-			IType[] iType = iTypeHeirchay.getAllInterfaces();
-			//Debug Purpose: will be remove once code is done
-			for (IType iType2 : iType) {
-				System.out.println(iType2);
+
+		if (nodeBindingType.isArray()) {
+			isNotInstanceOfCollection = true;
+		} else {
+			// STEP 1: getting java the element of the type,
+			IType iTypeElement = (IType) nodeBindingType.getJavaElement();
+			// Debug Purpose: will be remove once code is done
+			System.out.println("This is ITypeElement " + iTypeElement);
+
+			try {
+				// STEP 2: getting java iTypeHeirchay,
+				ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
+				// Debug Purpose: will be remove once code is done
+				System.out.println("this is ITypeHeirchay " + iTypeHeirchay);
+				// STEP 3:
+				IType[] iType = iTypeHeirchay.getAllInterfaces();
+				// Debug Purpose: will be remove once code is done
+				for (IType iType2 : iType) {
+					System.out.println(iType2);
+				}
+				// ---------Debug---------------//
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			//---------Debug---------------//
-		} catch (JavaModelException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
 		String typeName = nodeBindingType.getQualifiedName();
-	
-			if ((typeName.startsWith("java.util.Collection"))) {
-				isNotInstanceOfCollection = false;
-			}
-		
+		//passing the default method by comparing List
+		if ((typeName.startsWith("java.util.Collection"))||(typeName.startsWith("java.util.List"))) {
+			isNotInstanceOfCollection = false;
+		}
+
 		return isNotInstanceOfCollection;
 	}
 
 	// getting any uncaught exception
 	public void checkException() {
 		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
-		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions
-				.getThrownUncaughtExceptions();
+		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
 		if (thrownUncaughtException.length > 0) {
 
 		}
 	}
 
 	// Checking with the precondiiton,
-	private static RefactoringStatus checkEnhancedForStatement(
-			EnhancedForStatement enhancedForStatement, IProgressMonitor pm) {
+	private static RefactoringStatus checkEnhancedForStatement(EnhancedForStatement enhancedForStatement,
+			IProgressMonitor pm) {
 		try {
 			// create the visitor.
 			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor();
@@ -188,45 +185,34 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
 
-			if (visitor.containsBreak()
-					|| visitor.containsContinue()
-					|| visitor.containsInvalidReturn()
-					|| visitor.containsMultipleReturn()
-					|| visitor.containsException()
-					|| checkEnhancedForStatementIteratesOverCollection(
-							enhancedForStatement, pm)) {
+			if (visitor.containsBreak() || visitor.containsContinue() || visitor.containsInvalidReturn()
+					|| visitor.containsMultipleReturn() || visitor.containsException()
+					|| checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
 				final Set<String> warningStatement = new HashSet<String>();
 				if (visitor.containsBreak()) {
-					warningStatement
-							.add("Enhanced for statement contains break.");
+					warningStatement.add("Enhanced for statement contains break.");
 				}
 
 				if (visitor.containsContinue()) {
-					warningStatement
-							.add("Enhanced for statement contains continue.");
+					warningStatement.add("Enhanced for statement contains continue.");
 				}
 
 				if (visitor.containsInvalidReturn()) {
-					warningStatement
-							.add("Enhanced for statement contains invalid return.");
+					warningStatement.add("Enhanced for statement contains invalid return.");
 				}
 
 				if (visitor.containsMultipleReturn()) {
-					warningStatement
-							.add("Enhanced for statement contains multiple return.");
+					warningStatement.add("Enhanced for statement contains multiple return.");
 				}
 
 				if (visitor.containsException()) {
-					warningStatement
-							.add("Enhanced for statement contains Exception.");
+					warningStatement.add("Enhanced for statement contains Exception.");
 				}
 
-				if (checkEnhancedForStatementIteratesOverCollection(
-						enhancedForStatement, pm)) {
-					warningStatement
-							.add("Enhanced for statement doesn't iterate over collecitons.");
+				if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
+					warningStatement.add("Enhanced for statement doesn't iterate over collecitons.");
 				}
-				
+
 				String warning = String.join(" ", warningStatement);
 				return RefactoringStatus.createWarningStatus(warning);
 			}
@@ -236,14 +222,12 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			pm.done();
 		}
 	}
-	
+
 	@Override
-	public Change createChange(IProgressMonitor pm) throws CoreException,
-			OperationCanceledException {
+	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
 
 		try {
-			pm.beginTask(
-					Messages.ForEachLoopToLambdaRefactoring_CreatingChange, 1);
+			pm.beginTask(Messages.ForEachLoopToLambdaRefactoring_CreatingChange, 1);
 
 			return new NullChange(getName());
 		} finally {
