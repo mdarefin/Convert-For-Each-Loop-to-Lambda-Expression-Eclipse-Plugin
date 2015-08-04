@@ -1,6 +1,5 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
-import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -24,7 +23,6 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
 import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
-import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -139,26 +137,33 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 		
-		String typeName = nodeBindingType.getQualifiedName();
+		//STEP 1:  getting java the element of the type, 
+		IType iTypeElement = (IType) nodeBindingType.getJavaElement();
+		//Debug Purpose: will be remove once code is done
+		System.out.println("This is ITypeElement "+iTypeElement);
 		
-		final Set<String> collectionsClassName = new HashSet<String>();
-
-		collectionsClassName.add("java.util.Collection");
-		collectionsClassName.add("java.util.List");
-		collectionsClassName.add("java.util.ArrayList");
-		collectionsClassName.add("java.util.LinkedList");
-		collectionsClassName.add("java.util.LinkedHashSet");
-		collectionsClassName.add("java.util.Set");
-		collectionsClassName.add("java.util.HashSet");
-		collectionsClassName.add("java.util.Map");
-		collectionsClassName.add("java.util.HashMap");
-
-		for (String name : collectionsClassName) {
-			if ((typeName.startsWith(name))) {
-				isNotInstanceOfCollection = false;
-				break;
+		try {
+			//STEP 2:  getting java iTypeHeirchay, 
+			ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
+			//Debug Purpose: will be remove once code is done
+			System.out.println("this is ITypeHeirchay "+iTypeHeirchay);
+			//STEP 3:
+			IType[] iType = iTypeHeirchay.getAllInterfaces();
+			//Debug Purpose: will be remove once code is done
+			for (IType iType2 : iType) {
+				System.out.println(iType2);
 			}
+			//---------Debug---------------//
+		} catch (JavaModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+		
+		String typeName = nodeBindingType.getQualifiedName();
+	
+			if ((typeName.startsWith("java.util.Collection"))) {
+				isNotInstanceOfCollection = false;
+			}
 		
 		return isNotInstanceOfCollection;
 	}
