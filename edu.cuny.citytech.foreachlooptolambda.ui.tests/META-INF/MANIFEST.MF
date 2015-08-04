@@ -10,7 +10,7 @@ Require-Bundle: org.junit,
  org.eclipse.ltk.ui.refactoring.tests,
  org.eclipse.jdt.ui.tests,
  org.eclipse.jdt.ui.tests.refactoring
-Import-Package: edu.cuny.citytech.refactoring.common.test,
+Import-Package: edu.cuny.citytech.refactoring.common.tests,
  org.eclipse.jdt.testplugin,
  org.eclipse.jdt.ui.tests.refactoring
 Export-Package: edu.cuny.citytech.foreachlooptolambda.tests

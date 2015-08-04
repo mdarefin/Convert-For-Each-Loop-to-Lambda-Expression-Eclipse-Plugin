@@ -1,34 +1,64 @@
-/**
- * 
- */
 package edu.cuny.citytech.foreachlooptolambda.tests;
 
-import edu.cuny.citytech.refactoring.common.test.RefactoringTest;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
-/**
- * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
- *         Khatchadourian</a>
- *
- */
+import java.util.logging.Logger;
+
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.ui.tests.refactoring.Java18Setup;
+import org.eclipse.ltk.core.refactoring.Refactoring;
+
+import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambdaRefactoring;
+import edu.cuny.citytech.refactoring.common.tests.RefactoringTest;
+
 @SuppressWarnings("restriction")
 public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 
+	private static final Class<ForeachLoopToLambdaRefactoringTest> clazz = ForeachLoopToLambdaRefactoringTest.class;
+
+	private static final Logger logger = Logger.getLogger(clazz.getName());
+
+	private static final String REFACTORING_PATH = "ForeachLoopToLambda/";
 
 	public ForeachLoopToLambdaRefactoringTest(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
-	public void testConstructor() throws Exception {
-		helperFail(new String[] { "A" }, new String[][] { new String[0] });
+	/**
+	 * @return
+	 */
+	public static Test suite() {
+		return setUpTest(new TestSuite(clazz));
 	}
 
-	public void testAnnotatedMethod() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+	/**
+	 * @param testSuite
+	 * @return
+	 */
+	public static Test setUpTest(Test test) {
+		return new Java18Setup(test);
 	}
 
-	public void testStaticMethod() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+	/**
+	 * @return the refactoringPath
+	 */
+	@Override
+	public String getRefactoringPath() {
+		return REFACTORING_PATH;
+	}
+
+	@Override
+	protected Logger getLogger() {
+		return logger;
+	}
+
+	@Override
+	protected Refactoring getRefactoring(IMethod... methods) {
+		return new ForeachLoopToLambdaRefactoring(methods);
 	}
 	
+	public void testLoopWithContinue() throws Exception {
+		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+	}
 }
