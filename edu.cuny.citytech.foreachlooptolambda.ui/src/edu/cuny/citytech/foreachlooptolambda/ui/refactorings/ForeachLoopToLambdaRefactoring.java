@@ -118,7 +118,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				IProgressMonitor subMonitor = new SubProgressMonitor(pm, statements.size());
 
 				// check preconditions on each.
-				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s,method, subMonitor)));
+				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s, method, subMonitor)));
 				pm.worked(1);
 			}
 			return status;
@@ -196,15 +196,15 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			}
 
 			if (visitor.containsContinue()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainContinue, method);			
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainContinue, method);
 			}
 
 			if (visitor.containsInvalidReturn()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainInvalidReturn, method);
 			}
-			
+
 			if (visitor.containsMultipleReturn()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);			
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
 			if (visitor.containsException()) {
@@ -214,9 +214,9 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
 			}
-			
-			
-			//status.merge(checkMethodBody(method, new SubProgressMonitor(pm, 1)));
+
+			// status.merge(checkMethodBody(method, new SubProgressMonitor(pm,
+			// 1)));
 			pm.worked(1);
 			return status; // passed.
 		} finally {
