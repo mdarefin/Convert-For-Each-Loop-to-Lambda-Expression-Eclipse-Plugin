@@ -12,12 +12,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IMethod;
 import org.eclipse.jdt.core.IType;
 import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.jdt.core.ITypeRoot;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
@@ -117,7 +118,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				IProgressMonitor subMonitor = new SubProgressMonitor(pm, statements.size());
 
 				// check preconditions on each.
-				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s, subMonitor)));
+				statements.stream().forEach(s -> status.merge(checkEnhancedForStatement(s,method, subMonitor)));
 				pm.worked(1);
 			}
 			return status;
@@ -148,9 +149,9 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				// Debug Purpose: will be remove once code is done
 				System.out.println("this is ITypeHeirchay " + iTypeHeirchay);
 				// STEP 3:
-				IType[] iType = iTypeHeirchay.getAllInterfaces();
+				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
 				// Debug Purpose: will be remove once code is done
-				for (IType iType2 : iType) {
+				for (IType iType2 : superInterface) {
 					System.out.println(iType2);
 				}
 				// ---------Debug---------------//
@@ -159,10 +160,11 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				e.printStackTrace();
 			}
 		}
-		
+
 		String typeName = nodeBindingType.getQualifiedName();
-		//passing the default method by comparing List
-		if ((typeName.startsWith("java.util.Collection"))||(typeName.startsWith("java.util.List"))) {
+		System.out.println(" name " + typeName);
+		// passing the default method by comparing List
+		if ((typeName.startsWith("java.util.Collection")) || (typeName.startsWith("java.util.List"))) {
 			isNotInstanceOfCollection = false;
 		}
 
