@@ -1,8 +1,10 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
+import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.core.runtime.CoreException;
@@ -23,6 +25,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
 import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
+import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -177,50 +180,80 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(EnhancedForStatement enhancedForStatement,
-			IProgressMonitor pm) {
+			IMethod method, IProgressMonitor pm) {
 		try {
+			RefactoringStatus status = new RefactoringStatus();
 			// create the visitor.
 			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor();
-
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
 
-			if (visitor.containsBreak() || visitor.containsContinue() || visitor.containsInvalidReturn()
-					|| visitor.containsMultipleReturn() || visitor.containsException()
-					|| checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
-				final Set<String> warningStatement = new HashSet<String>();
-				if (visitor.containsBreak()) {
-					warningStatement.add("Enhanced for statement contains break.");
-				}
-
-				if (visitor.containsContinue()) {
-					warningStatement.add("Enhanced for statement contains continue.");
-				}
-
-				if (visitor.containsInvalidReturn()) {
-					warningStatement.add("Enhanced for statement contains invalid return.");
-				}
-
-				if (visitor.containsMultipleReturn()) {
-					warningStatement.add("Enhanced for statement contains multiple return.");
-				}
-
-				if (visitor.containsException()) {
-					warningStatement.add("Enhanced for statement contains Exception.");
-				}
-
-				if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
-					warningStatement.add("Enhanced for statement doesn't iterate over collecitons.");
-				}
-
-				String warning = String.join(" ", warningStatement);
-				return RefactoringStatus.createWarningStatus(warning);
+			final Set<String> warningStatement = new HashSet<String>();
+			if (visitor.containsBreak()) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainBreak, method);
 			}
+
+			if (visitor.containsContinue()) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainContinue, method);			
+			}
+
+			if (visitor.containsInvalidReturn()) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainInvalidReturn, method);
+			}
+			
+			if (visitor.containsMultipleReturn()) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);			
+			}
+
+			if (visitor.containsException()) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
+			}
+
+			if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
+				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
+			}
+			
+			
+			//status.merge(checkMethodBody(method, new SubProgressMonitor(pm, 1)));
 			pm.worked(1);
-			return new RefactoringStatus(); // passed.
+			return status; // passed.
 		} finally {
 			pm.done();
 		}
+	}
+
+	protected static RefactoringStatus checkMethodBody(IMethod method, IProgressMonitor pm) {
+		RefactoringStatus status = new RefactoringStatus();
+
+		ITypeRoot root = method.getCompilationUnit();
+		CompilationUnit unit = RefactoringASTParser.parseWithASTProvider(root, false, new SubProgressMonitor(pm, 1));
+
+		MethodDeclaration declaration;
+		try {
+			declaration = ASTNodeSearchUtil.getMethodDeclarationNode(method, unit);
+			if (declaration != null) {
+				Block body = declaration.getBody();
+
+				if (body != null) {
+					@SuppressWarnings("rawtypes")
+					List statements = body.statements();
+
+					if (!statements.isEmpty()) {
+						// TODO for now.
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_NoMethodsWithStatements, method);
+					}
+				}
+			}
+		} catch (JavaModelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return status;
+	}
+
+	protected static void addWarning(RefactoringStatus status, String message, IMethod method) {
+		status.addWarning(MessageFormat.format(message, method.getElementName()), JavaStatusContext.create(method));
 	}
 
 	@Override
