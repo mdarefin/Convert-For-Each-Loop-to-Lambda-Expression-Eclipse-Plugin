@@ -151,9 +151,9 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				// STEP 3:
 				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
 				// Debug Purpose: will be remove once code is done
-				for (IType iType2 : superInterface) {
-					System.out.println(iType2);
-				}
+//				for (IType iType2 : superInterface) {
+//					System.out.println(iType2);
+//				}
 				// ---------Debug---------------//
 			} catch (JavaModelException e) {
 				// TODO Auto-generated catch block
@@ -164,7 +164,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		String typeName = nodeBindingType.getQualifiedName();
 		System.out.println(" name " + typeName);
 		// passing the default method by comparing List
-		if ((typeName.startsWith("java.util.Collection")) || (typeName.startsWith("java.util.List"))) {
+		if ((typeName.startsWith("java.util.Collection"))) {
 			isNotInstanceOfCollection = false;
 		}
 
