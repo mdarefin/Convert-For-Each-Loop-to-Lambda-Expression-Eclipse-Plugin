@@ -2,6 +2,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -134,41 +135,36 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
-
+		//getting the class-name 
+		String typeName = nodeBindingType.getQualifiedName();
+		if ((typeName.startsWith("java.util.Collection"))) {
+			isNotInstanceOfCollection = false;
+		}
+		//Checking if the enhancedForStatement implement or extend collection
 		if (nodeBindingType.isArray()) {
 			isNotInstanceOfCollection = true;
 		} else {
 			// STEP 1: getting java the element of the type,
 			IType iTypeElement = (IType) nodeBindingType.getJavaElement();
-			// Debug Purpose: will be remove once code is done
-			System.out.println("This is ITypeElement " + iTypeElement);
-
 			try {
 				// STEP 2: getting java iTypeHeirchay,
 				ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
-				// Debug Purpose: will be remove once code is done
-				System.out.println("this is ITypeHeirchay " + iTypeHeirchay);
 				// STEP 3:
 				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
-				// Debug Purpose: will be remove once code is done
-//				for (IType iType2 : superInterface) {
-//					System.out.println(iType2);
-//				}
-				// ---------Debug---------------//
+
 			} catch (JavaModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		String typeName = nodeBindingType.getQualifiedName();
-		System.out.println(" name " + typeName);
-		// passing the default method by comparing List
-		if ((typeName.startsWith("java.util.Collection"))) {
-			isNotInstanceOfCollection = false;
-		}
-
+		
 		return isNotInstanceOfCollection;
+	}
+
+	// checking if the class implement Collections
+	public static void getIElement(IType iType) {
+
 	}
 
 	// getting any uncaught exception
