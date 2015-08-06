@@ -98,11 +98,11 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	
 		
 	public void testLoopIterateOverArrayList() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
 	
 	public void testLoopIterateOverList() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
 	
 	public void testLoopIterateOverArray() throws Exception {
