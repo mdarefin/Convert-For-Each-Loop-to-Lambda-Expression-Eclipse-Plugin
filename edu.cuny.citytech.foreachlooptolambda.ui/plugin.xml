@@ -28,6 +28,11 @@
       </activeWhen>  
     </handler>
   </extension>
+  <extension point="org.eclipse.ui.ide.markerResolution">
+      <markerResolutionGenerator
+         markerType="org.eclipse.core.resources.problemmarker"
+         class="org.eclipse.escript.quickfix.QuickFixer"/>
+   </extension>
   <extension point="org.eclipse.ui.menus">
     <!-- [rk] Doesn't seem to be working -->
     <menuContribution locationURI="menu:org.eclipse.jdt.ui.refactoring.menu?after=additions">
