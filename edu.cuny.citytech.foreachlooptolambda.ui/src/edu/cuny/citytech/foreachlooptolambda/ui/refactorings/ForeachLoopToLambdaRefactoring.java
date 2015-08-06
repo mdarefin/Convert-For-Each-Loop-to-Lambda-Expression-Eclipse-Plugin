@@ -3,6 +3,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -142,34 +143,28 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		} else {
 			// getting the class-name to check if it's part of Collection
 			String typeName = nodeBindingType.getQualifiedName();
-			System.out.println("this is type name "+typeName);
+			System.out.println("this is type name " + typeName);
 			if (typeName.startsWith("java.util.Collection")) {
 				isNotInstanceOfCollection = false;
 			}
 
 			// STEP 1: getting java the element of the type,
 			IType iTypeElement = (IType) nodeBindingType.getJavaElement();
-			System.out.println("this is iTypeElement "+iTypeElement);
+			System.out.println("this is iTypeElement " + iTypeElement);
 			System.out.println("--------------------------------------------------");
 			try {
 				// STEP 2: getting java iTypeHeirchay,
 				ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
-				// Debug Purpose: will be remove once code is done
-				System.out.println("this is ITypeHeirchay " + iTypeHeirchay);
-				System.out.println("--------------------------------------------------");
-				// STEP 3:
+				// STEP 3: checking if Collections class being implemented
 				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
-				// Debug Purpose: will be remove once code is done	
+				// Debug Purpose: will be remove once code is done
 				for (IType iType2 : superInterface) {
-					System.out.println("this is superInterface "+iType2);
-					System.out.println("--------------------------------------------------");
-					String[] interfaceName = iType2.getSuperInterfaceNames();
-					for (String string : interfaceName) {
-						System.out.println("this is interfaceName "+string);
+					System.out.println("this is superInterface " + iType2);
+					String interfaceName = iType2.getFullyQualifiedParameterizedName();
+					if (interfaceName.startsWith("java.util.Collection")) {
+						isNotInstanceOfCollection = false;
 					}
-					
 				}
-				// ---------Debug---------------//
 			} catch (JavaModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
