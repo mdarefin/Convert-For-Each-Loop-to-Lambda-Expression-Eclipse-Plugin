@@ -74,10 +74,18 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	public void testLoopWithReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+		
 	public void testLoopWithMultipleReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
+	
+//	public void testLoopWithIntegerReturn() throws Exception {
+//		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+//	}
+//	
+//	public void testLoopWithBooleanReturn() throws Exception {
+//		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+//	}
 	
 //	public void testLoopIterateOverCollection() throws Exception {
 //		helperFail(new String[] { "m" }, new String[][] { new String[0] });
