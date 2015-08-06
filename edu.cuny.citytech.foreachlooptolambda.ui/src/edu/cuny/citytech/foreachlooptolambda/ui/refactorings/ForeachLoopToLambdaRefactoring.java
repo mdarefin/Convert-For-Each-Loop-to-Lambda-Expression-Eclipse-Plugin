@@ -131,34 +131,43 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	// Checking if the EnhancedForLoop iterate over collection
 	private static boolean checkEnhancedForStatementIteratesOverCollection(EnhancedForStatement enhancedForStatement,
 			IProgressMonitor pm) {
-		boolean isNotInstanceOfCollection = true;
 
+		boolean isNotInstanceOfCollection = true;
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
-		//getting the class-name 
-		String typeName = nodeBindingType.getQualifiedName();
-		if ((typeName.startsWith("java.util.Collection"))) {
-			isNotInstanceOfCollection = false;
-		}
-		//Checking if the enhancedForStatement implement or extend collection
+
+		// Checking if the enhancedForStatement implement or extend collection
 		if (nodeBindingType.isArray()) {
 			isNotInstanceOfCollection = true;
 		} else {
+			// getting the class-name to check if it's part of Collection
+			String typeName = nodeBindingType.getQualifiedName();
+
+			if (typeName.startsWith("java.util.Collection")) {
+				isNotInstanceOfCollection = false;
+			}
+
 			// STEP 1: getting java the element of the type,
 			IType iTypeElement = (IType) nodeBindingType.getJavaElement();
 			try {
 				// STEP 2: getting java iTypeHeirchay,
 				ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
+				// Debug Purpose: will be remove once code is done
+				System.out.println("this is ITypeHeirchay " + iTypeHeirchay);
+
 				// STEP 3:
 				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
+				// Debug Purpose: will be remove once code is done
+				for (IType iType2 : superInterface) {
 
+				}
+				// ---------Debug---------------//
 			} catch (JavaModelException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-		
 		return isNotInstanceOfCollection;
 	}
 
