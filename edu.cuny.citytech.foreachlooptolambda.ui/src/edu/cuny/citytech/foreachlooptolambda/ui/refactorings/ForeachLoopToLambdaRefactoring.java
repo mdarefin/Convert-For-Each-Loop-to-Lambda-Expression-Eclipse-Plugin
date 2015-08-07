@@ -133,18 +133,17 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	private static boolean checkEnhancedForStatementIteratesOverCollection(EnhancedForStatement enhancedForStatement,
 			IProgressMonitor pm) {
 
-		boolean isNotInstanceOfCollection = true;
 		Expression expression = enhancedForStatement.getExpression();
 		ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 
 		// Checking if the enhancedForStatement implement or extend collection
 		if (nodeBindingType.isArray()) {
-			isNotInstanceOfCollection = true;
+			return true;
 		} else {
 			// getting the class-name to check if it's part of Collection
 			String typeName = nodeBindingType.getQualifiedName();
 			if (typeName.startsWith("java.util.Collection")) {
-				isNotInstanceOfCollection = false;
+				return false;
 			}
 
 			// STEP 1: getting java the element of the type,
@@ -158,7 +157,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				for (IType iType : superInterface) {
 					String interfaceName = iType.getFullyQualifiedParameterizedName();
 					if (interfaceName.startsWith("java.util.Collection")) {
-						isNotInstanceOfCollection = false;
+						return false;
 					}
 				}
 			} catch (JavaModelException e) {
@@ -166,7 +165,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			}
 		}
 
-		return isNotInstanceOfCollection;
+		return true;
 	}
 
 	// getting any uncaught exception
