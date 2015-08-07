@@ -143,40 +143,30 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		} else {
 			// getting the class-name to check if it's part of Collection
 			String typeName = nodeBindingType.getQualifiedName();
-			System.out.println("this is type name " + typeName);
 			if (typeName.startsWith("java.util.Collection")) {
 				isNotInstanceOfCollection = false;
 			}
 
 			// STEP 1: getting java the element of the type,
 			IType iTypeElement = (IType) nodeBindingType.getJavaElement();
-			System.out.println("this is iTypeElement " + iTypeElement);
-			System.out.println("--------------------------------------------------");
 			try {
 				// STEP 2: getting java iTypeHeirchay,
 				ITypeHierarchy iTypeHeirchay = iTypeElement.newSupertypeHierarchy(pm);
 				// STEP 3: checking if Collections class being implemented
 				IType[] superInterface = iTypeHeirchay.getAllInterfaces();
-				// Debug Purpose: will be remove once code is done
-				for (IType iType2 : superInterface) {
-					System.out.println("this is superInterface " + iType2);
-					String interfaceName = iType2.getFullyQualifiedParameterizedName();
+
+				for (IType iType : superInterface) {
+					String interfaceName = iType.getFullyQualifiedParameterizedName();
 					if (interfaceName.startsWith("java.util.Collection")) {
 						isNotInstanceOfCollection = false;
 					}
 				}
 			} catch (JavaModelException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
 		return isNotInstanceOfCollection;
-	}
-
-	// checking if the class implement Collections
-	public static void getIElement(IType iType) {
-
 	}
 
 	// getting any uncaught exception
