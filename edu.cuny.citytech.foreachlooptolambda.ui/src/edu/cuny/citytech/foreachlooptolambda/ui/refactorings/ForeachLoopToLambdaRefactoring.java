@@ -2,8 +2,6 @@ package edu.cuny.citytech.foreachlooptolambda.ui.refactorings;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -141,7 +139,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			return true;
 		} else {
 			// getting the class-name to check if it's part of Collection
-			String typeName = nodeBindingType.getQualifiedName();
+			String fullTypeName = nodeBindingType.getQualifiedName();
+			String typeName = fullTypeName.split("<")[0];
 			if (typeName.startsWith("java.util.Collection")) {
 				return false;
 			}
@@ -186,8 +185,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor();
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
-
-			final Set<String> warningStatement = new HashSet<String>();
+			
 			if (visitor.containsBreak()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainBreak, method);
 			}
@@ -216,7 +214,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// 1)));
 			pm.worked(1);
 			return status; // passed.
-		} finally {
+		} 
+		finally {
 			pm.done();
 		}
 	}
