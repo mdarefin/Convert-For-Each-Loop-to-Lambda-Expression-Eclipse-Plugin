@@ -26,7 +26,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.encounteredContinueStatement = true;
 		return super.visit(node);
 	}
-
+	
 	/**
 	 * checking if returnStatement is boolean, not null and has only one return
 	 * 

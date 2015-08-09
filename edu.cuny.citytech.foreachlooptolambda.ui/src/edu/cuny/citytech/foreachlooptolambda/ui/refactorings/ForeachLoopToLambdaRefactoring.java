@@ -35,6 +35,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitors.EnhancedForStatementVisitor;
+import edu.cuny.citytech.foreachlooptolambda.ui.visitors.ThrownExceptionFinderVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
 /**
@@ -168,12 +169,13 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// getting any uncaught exception
-	public void checkException() {
-		ThrownExceptionFinder thrownUncaughtExceptions = new ThrownExceptionFinder();
+	public static boolean checkException() {
+		ThrownExceptionFinderVisitor thrownUncaughtExceptions = new ThrownExceptionFinderVisitor();
 		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
 		if (thrownUncaughtException.length > 0) {
-
+			return true;
 		}
+		return false;
 	}
 
 	// Checking with the precondiiton,
@@ -202,7 +204,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
-			if (visitor.containsException()) {
+			if (checkException()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
 
