@@ -169,12 +169,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// getting any uncaught exception
-	public static boolean checkException() {
-		ThrownExceptionFinderVisitor thrownUncaughtExceptions = new ThrownExceptionFinderVisitor();
-		ReferenceBinding[] thrownUncaughtException = thrownUncaughtExceptions.getThrownUncaughtExceptions();
-		if (thrownUncaughtException.length > 0) {
-			return true;
-		}
+	private static boolean checkException() {
+		
 		return false;
 	}
 
