@@ -136,7 +136,7 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	}
 	
 	public void testLoopThrowMultipleExceptions() throws Exception {
-		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
 
