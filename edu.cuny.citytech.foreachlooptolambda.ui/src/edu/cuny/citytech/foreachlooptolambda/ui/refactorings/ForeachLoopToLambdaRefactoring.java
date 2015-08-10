@@ -186,7 +186,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			enhancedForStatement.accept(visitor);
 
 			try {
-				if (getEnhancedForStatements(method,pm).isEmpty()) {
+				if (getEnhancedForStatements(method,pm).size() < 1) {
 					addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainEnhancedForStatement, method);
 				} else {
 
