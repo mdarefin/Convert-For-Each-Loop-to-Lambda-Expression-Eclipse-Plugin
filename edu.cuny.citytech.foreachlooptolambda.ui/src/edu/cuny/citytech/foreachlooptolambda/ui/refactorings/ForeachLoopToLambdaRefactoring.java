@@ -142,7 +142,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// getting the class-name to check if it's part of Collection
 			String fullTypeName = nodeBindingType.getQualifiedName();
 			String typeName = fullTypeName.split("<")[0];
-			if (typeName.startsWith("java.util.Collection")) {
+			if (typeName.equals("java.util.Collection")) {
 				return false;
 			}
 
