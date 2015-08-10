@@ -177,7 +177,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(EnhancedForStatement enhancedForStatement,
-			IMethod method, IProgressMonitor pm) {
+			IMethod method, IProgressMonitor pm){
 		try {
 			RefactoringStatus status = new RefactoringStatus();
 			// create the visitor.
@@ -185,30 +185,39 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
 
-			if (visitor.containsBreak()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainBreak, method);
-			}
+			try {
+				if (getEnhancedForStatements(method,pm).isEmpty()) {
+					addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainEnhancedForStatement, method);
+				} else {
 
-			if (visitor.containsContinue()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainContinue, method);
-			}
+					if (visitor.containsBreak()) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainBreak, method);
+					}
 
-			if (visitor.containsInvalidReturn()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainInvalidReturn, method);
-			}
+					if (visitor.containsContinue()) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainContinue, method);
+					}
 
-			if (visitor.containsMultipleReturn()) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
-			}
+					if (visitor.containsInvalidReturn()) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainInvalidReturn, method);
+					}
 
-			if (checkEnhancedForStatementContainExceptions(enhancedForStatement, pm)) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
-			}
+					if (visitor.containsMultipleReturn()) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
+					}
 
-			if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
-				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
-			}
+					if (checkEnhancedForStatementContainExceptions(enhancedForStatement, pm)) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
+					}
 
+					if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
+						addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
+					}
+				}
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			// status.merge(checkMethodBody(method, new SubProgressMonitor(pm,
 			// 1)));
 			pm.worked(1);

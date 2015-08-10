@@ -30,6 +30,7 @@ public class Messages extends NLS {
 	public static String ForEachLoopToLambdaRefactoring_ContainMultipleReturn;
 	public static String ForEachLoopToLambdaRefactoring_ContainException;
 	public static String ForEachLoopToLambdaRefactoring_IteratesOverCollection;
+	public static String ForEachLoopToLambdaRefactoring_ContainEnhancedForStatement;
 
 	static {
 		// initialize resource bundle
