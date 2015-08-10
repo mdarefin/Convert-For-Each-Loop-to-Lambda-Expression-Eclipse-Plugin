@@ -169,8 +169,9 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// getting any uncaught exception
-	private static boolean checkException() {
-		
+	private static boolean checkEnhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
+			IProgressMonitor pm) {
+
 		return false;
 	}
 
@@ -183,7 +184,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor();
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
-			
+
 			if (visitor.containsBreak()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainBreak, method);
 			}
@@ -200,7 +201,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
-			if (checkException()) {
+			if (checkEnhancedForStatementContainExceptions(enhancedForStatement, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
 
@@ -212,8 +213,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			// 1)));
 			pm.worked(1);
 			return status; // passed.
-		} 
-		finally {
+		} finally {
 			pm.done();
 		}
 	}
