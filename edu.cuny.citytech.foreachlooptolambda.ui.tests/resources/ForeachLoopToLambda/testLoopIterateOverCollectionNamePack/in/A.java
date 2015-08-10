@@ -1,19 +1,19 @@
-package java.util.collection;
+package p;
 
 import java.util.Iterator;
 
-class java.util.Collection.foorLoop implements java.lang.Iterable {
+class A implements java.lang.Iterable {
 
 	@Override
 	public Iterator iterator() {
 		return null;
 	}
+ 
+	void m() {
+	    A a = null; 
+	    for (Object o : a)
+	      ;
+	  }
+
 }
 
-class A {
-	  void m() {
-	    A l = null; //this class implements java.lang.Iterable.
-	    //should fail precondition
-	    for (Object o : l);
-   }
-}
