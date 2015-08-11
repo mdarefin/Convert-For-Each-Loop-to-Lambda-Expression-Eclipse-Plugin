@@ -18,6 +18,7 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 public class ThrownExceptionFinderVisitor extends ASTVisitor {
 
@@ -82,6 +83,9 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		return allDiscouragedExceptions;
 	}
 	
+	public boolean visit(TypeDeclaration typeDeclaration) {
+		return visit(typeDeclaration);
+	}
 	
 	public boolean visit(Statement statement) {
 		this.exceptionsStack.push(this.thrownExceptions);
