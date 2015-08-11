@@ -64,6 +64,12 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		}
 	}
 	
+	public ITypeBinding[] getAlreadyCaughtExceptions() {
+		ITypeBinding[] allCaughtExceptions = new ITypeBinding[this.caughtExceptions.size()];
+		this.caughtExceptions.toArray(allCaughtExceptions);
+		return allCaughtExceptions;
+	}
+	
 	public ITypeBinding[] getThrownUncaughtExceptions() {
 		ITypeBinding[] result = new ITypeBinding[this.thrownExceptions.size()];
 		this.thrownExceptions.toArray(result);
@@ -76,7 +82,6 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		this.exceptionsStack.push(this.thrownExceptions);
 		HashSet<Statement> exceptionSet = new HashSet<Statement>();
 		this.thrownExceptions = exceptionSet;
-		//statement.BLOCK.traverse(this, scope);
 
 		this.thrownExceptions = (HashSet)this.exceptionsStack.pop();
 
