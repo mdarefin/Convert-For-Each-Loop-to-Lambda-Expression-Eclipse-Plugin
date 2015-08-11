@@ -76,6 +76,11 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		return result;
 	}
 	
+	public ITypeBinding[] getDiscouragedExceptions() {
+		ITypeBinding[] allDiscouragedExceptions = new ITypeBinding[this.discouragedExceptions.size()];
+		this.discouragedExceptions.toArray(allDiscouragedExceptions);
+		return allDiscouragedExceptions;
+	}
 	
 	
 	public boolean visit(Statement statement) {
