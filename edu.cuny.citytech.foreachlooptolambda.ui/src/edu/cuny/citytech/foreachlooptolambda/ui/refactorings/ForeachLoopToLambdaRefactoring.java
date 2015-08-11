@@ -24,8 +24,6 @@ import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
-import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
-import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
 import org.eclipse.jdt.internal.corext.refactoring.base.JavaStatusContext;
 import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 import org.eclipse.jdt.internal.corext.refactoring.util.RefactoringASTParser;
@@ -170,7 +168,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	// getting any uncaught exception
 	private static boolean checkEnhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
 			IProgressMonitor pm) {
-
+	
 		return false;
 	}
 

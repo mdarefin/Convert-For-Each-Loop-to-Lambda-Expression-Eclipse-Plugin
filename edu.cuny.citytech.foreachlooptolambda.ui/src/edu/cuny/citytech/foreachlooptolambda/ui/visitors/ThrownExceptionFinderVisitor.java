@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 
@@ -44,25 +44,19 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		//removeCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
 	}
 	
-	private void acceptException(IMethodBinding binding) {
+	private void acceptException(ITypeBinding binding) {
 		if (binding != null) {
 			this.thrownExceptions.add(binding);
 		}
 	}
 	
 	public void endVisit(ThrowStatement throwStatement) {
-		acceptException((IMethodBinding) (throwStatement));
+		acceptException((ITypeBinding) (throwStatement));
 		super.endVisit(throwStatement);
 	}
 	
-	public IMethodBinding[] getAlreadyCaughtExceptions() {
-		IMethodBinding[] allCaughtExceptions = new IMethodBinding[this.caughtExceptions.size()];
-		this.caughtExceptions.toArray(allCaughtExceptions);
-		return allCaughtExceptions;
-	}
-	
-	public IMethodBinding[] getThrownUncaughtExceptions() {
-		IMethodBinding[] result = new IMethodBinding[this.thrownExceptions.size()];
+	public ITypeBinding[] getThrownUncaughtExceptions() {
+		ITypeBinding[] result = new ITypeBinding[this.thrownExceptions.size()];
 		this.thrownExceptions.toArray(result);
 		return result;
 	}
@@ -86,5 +80,6 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		
 		return false;
 	}
+	
 	
 }
