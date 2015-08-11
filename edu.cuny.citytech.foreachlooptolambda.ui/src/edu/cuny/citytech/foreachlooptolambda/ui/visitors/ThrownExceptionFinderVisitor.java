@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
@@ -53,6 +54,14 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 	public void endVisit(ThrowStatement throwStatement) {
 		acceptException((ITypeBinding) (throwStatement));
 		super.endVisit(throwStatement);
+	}
+	
+	private void endVisitMethodInvocation(IMethodBinding methodBinding) {
+		ITypeBinding[] thrownExceptionBindings = methodBinding.getExceptionTypes();
+		int length = thrownExceptionBindings == null ? 0 : thrownExceptionBindings.length;
+		for (int i = 0; i < length; i++) {
+			acceptException(thrownExceptionBindings[i]);
+		}
 	}
 	
 	public ITypeBinding[] getThrownUncaughtExceptions() {
