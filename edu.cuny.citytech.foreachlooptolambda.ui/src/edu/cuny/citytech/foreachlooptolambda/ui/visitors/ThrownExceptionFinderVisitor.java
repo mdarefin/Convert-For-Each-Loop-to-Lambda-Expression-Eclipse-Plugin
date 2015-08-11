@@ -46,46 +46,17 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		//removeCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
 	}
 	
-	private void acceptException(ITypeBinding binding) {
-		if (binding != null) {
-			this.thrownExceptions.add(binding);
+	private void acceptException(Statement statement) {
+		if (statement != null) {
+			this.thrownExceptions.add(statement);
 		}
 	}
 	
 	public void endVisit(ThrowStatement throwStatement) {
-		acceptException((ITypeBinding) (throwStatement));
+		acceptException (throwStatement);
 		super.endVisit(throwStatement);
 	}
 	
-	private void endVisitMethodInvocation(IMethodBinding methodBinding) {
-		ITypeBinding[] thrownExceptionBindings = methodBinding.getExceptionTypes();
-		int length = thrownExceptionBindings == null ? 0 : thrownExceptionBindings.length;
-		for (int i = 0; i < length; i++) {
-			acceptException(thrownExceptionBindings[i]);
-		}
-	}
-	
-	public ITypeBinding[] getAlreadyCaughtExceptions() {
-		ITypeBinding[] allCaughtExceptions = new ITypeBinding[this.caughtExceptions.size()];
-		this.caughtExceptions.toArray(allCaughtExceptions);
-		return allCaughtExceptions;
-	}
-	
-	public ITypeBinding[] getThrownUncaughtExceptions() {
-		ITypeBinding[] result = new ITypeBinding[this.thrownExceptions.size()];
-		this.thrownExceptions.toArray(result);
-		return result;
-	}
-	
-	public ITypeBinding[] getDiscouragedExceptions() {
-		ITypeBinding[] allDiscouragedExceptions = new ITypeBinding[this.discouragedExceptions.size()];
-		this.discouragedExceptions.toArray(allDiscouragedExceptions);
-		return allDiscouragedExceptions;
-	}
-	
-	public boolean visit(TypeDeclaration typeDeclaration) {
-		return visit(typeDeclaration);
-	}
 	
 	public boolean visit(Statement statement) {
 		this.exceptionsStack.push(this.thrownExceptions);
