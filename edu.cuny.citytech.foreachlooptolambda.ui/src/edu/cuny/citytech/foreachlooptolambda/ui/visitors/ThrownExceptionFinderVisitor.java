@@ -14,11 +14,9 @@ import java.util.HashSet;
 import java.util.Stack;
 
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.Statement;
-import org.eclipse.jdt.core.dom.TryStatement;
-import org.eclipse.jdt.internal.codeassist.ThrownExceptionFinder;
-import org.eclipse.jdt.internal.compiler.lookup.BlockScope;
-import org.eclipse.jdt.internal.compiler.lookup.ReferenceBinding;
+import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class ThrownExceptionFinderVisitor extends ASTVisitor {
 
@@ -37,44 +35,43 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 	 * @param satement
 	 * @param scope
 	 */
-	public void processThrownExceptions(Statement statement, BlockScope scope) {
-		this.thrownExceptions = new HashSet();
-		this.exceptionsStack = new Stack();
-		this.caughtExceptions = new HashSet();
-		this.discouragedExceptions = new HashSet();
+	public void processThrownExceptions(Statement statement) {
+		this.thrownExceptions = new HashSet<Statement>();
+		this.exceptionsStack = new Stack<HashSet<?>>();
+		this.caughtExceptions = new HashSet<Statement>();
+		this.discouragedExceptions = new HashSet<Statement>();
 		//statement.traverse(this, scope);
-		//emoveCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
+		//removeCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
 	}
 	
-	/**
-	 * Returns all the already caught exceptions in catch blocks, found by the call to
-	 * {@link ThrownExceptionFinder#processThrownExceptions(TryStatement, BlockScope)}
-	 * @return Returns an array of those exceptions that have been caught already in previous catch or
-	 * multi-catch blocks of the same try block. (Exceptions caught in inner try-catches are obtained via
-	 * {@link ThrownExceptionFinder#getDiscouragedExceptions()}.
-	 */
-	public ReferenceBinding[] getAlreadyCaughtExceptions() {
-		ReferenceBinding[] allCaughtExceptions = new ReferenceBinding[this.caughtExceptions.size()];
-		this.caughtExceptions.toArray(allCaughtExceptions);
-		return allCaughtExceptions;
-	}
-	
-	public ReferenceBinding[] getThrownUncaughtExceptions() {
-		ReferenceBinding[] result = new ReferenceBinding[this.thrownExceptions.size()];
-		this.thrownExceptions.toArray(result);
-		return result;
-	}
-
-	
-	private void acceptException(ReferenceBinding binding) {
-		if (binding != null && binding.isValidBinding()) {
+	private void acceptException(IMethodBinding binding) {
+		if (binding != null) {
 			this.thrownExceptions.add(binding);
 		}
 	}
 	
-	public boolean visit(Statement statement, BlockScope scope) {
+	public void endVisit(ThrowStatement throwStatement) {
+		acceptException((IMethodBinding) (throwStatement));
+		super.endVisit(throwStatement);
+	}
+	
+	public IMethodBinding[] getAlreadyCaughtExceptions() {
+		IMethodBinding[] allCaughtExceptions = new IMethodBinding[this.caughtExceptions.size()];
+		this.caughtExceptions.toArray(allCaughtExceptions);
+		return allCaughtExceptions;
+	}
+	
+	public IMethodBinding[] getThrownUncaughtExceptions() {
+		IMethodBinding[] result = new IMethodBinding[this.thrownExceptions.size()];
+		this.thrownExceptions.toArray(result);
+		return result;
+	}
+	
+	
+	
+	public boolean visit(Statement statement) {
 		this.exceptionsStack.push(this.thrownExceptions);
-		HashSet exceptionSet = new HashSet();
+		HashSet<Statement> exceptionSet = new HashSet<Statement>();
 		this.thrownExceptions = exceptionSet;
 		//statement.BLOCK.traverse(this, scope);
 
