@@ -42,28 +42,36 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		this.exceptionsStack = new Stack<HashSet<?>>();
 		this.caughtExceptions = new HashSet<Statement>();
 		this.discouragedExceptions = new HashSet<Statement>();
-		//statement.traverse(this, scope);
-		//removeCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
+		// statement.traverse(this, scope);
+		// removeCaughtExceptions(tryStatement,true /* remove unchecked
+		// exceptions this time */);
 	}
-	
+
 	private void acceptException(ITypeBinding binding) {
 		if (binding != null) {
 			this.thrownExceptions.add(binding);
 		}
 	}
-	
+
 	public void endVisit(ThrowStatement throwStatement) {
-		acceptException ((ITypeBinding) throwStatement);
+		acceptException((ITypeBinding) throwStatement);
 		super.endVisit(throwStatement);
 	}
-	
-	
+
+	private void endVisitMethodInvocation(IMethodBinding methodBinding) {
+		ITypeBinding[] thrownExceptionBindings = methodBinding.getExceptionTypes();
+		int length = thrownExceptionBindings == null ? 0 : thrownExceptionBindings.length;
+		for (int i = 0; i < length; i++) {
+			acceptException(thrownExceptionBindings[i]);
+		}
+	}
+
 	public boolean visit(Statement statement) {
 		this.exceptionsStack.push(this.thrownExceptions);
 		HashSet<Statement> exceptionSet = new HashSet<Statement>();
 		this.thrownExceptions = exceptionSet;
 
-		this.thrownExceptions = (HashSet)this.exceptionsStack.pop();
+		this.thrownExceptions = (HashSet) this.exceptionsStack.pop();
 
 		Object[] values = exceptionSet.toArray();
 		for (int i = 0; i < values.length; i++) {
@@ -71,9 +79,8 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 				this.thrownExceptions.add(values[i]);
 			}
 		}
-		
+
 		return false;
 	}
-	
-	
+
 }
