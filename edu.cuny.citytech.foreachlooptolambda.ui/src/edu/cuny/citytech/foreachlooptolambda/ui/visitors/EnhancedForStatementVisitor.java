@@ -32,6 +32,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		SimpleName name = node.getName();
+		System.out.println(name);
 		
 		return super.visit(node);
 	}
@@ -80,5 +81,4 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean containsNEFS() {
 		return encounteredNonEffectivelyFinalVars;
 	}
-	
 }
