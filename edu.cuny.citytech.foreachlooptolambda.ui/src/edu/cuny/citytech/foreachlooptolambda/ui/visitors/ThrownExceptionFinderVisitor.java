@@ -46,14 +46,14 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		//removeCaughtExceptions(tryStatement,true /* remove unchecked exceptions this time */);
 	}
 	
-	private void acceptException(Statement statement) {
-		if (statement != null) {
-			this.thrownExceptions.add(statement);
+	private void acceptException(ITypeBinding binding) {
+		if (binding != null) {
+			this.thrownExceptions.add(binding);
 		}
 	}
 	
 	public void endVisit(ThrowStatement throwStatement) {
-		acceptException (throwStatement);
+		acceptException ((ITypeBinding) throwStatement);
 		super.endVisit(throwStatement);
 	}
 	
