@@ -7,13 +7,13 @@ import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SimpleName;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
-	private boolean encounteredMethodInvocation;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
 
@@ -31,7 +31,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	
 	@Override
 	public boolean visit(MethodInvocation node) {
-		this.encounteredMethodInvocation = true;
+		SimpleName name = node.getName();
+		
 		return super.visit(node);
 	}
 	
@@ -74,10 +75,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	public boolean containsException() {
 		return encounteredThrownCheckedException;
-	}
-	
-	public boolean visitMethodInvocation() {
-		return encounteredMethodInvocation;
 	}
 	
 	public boolean containsNEFS() {
