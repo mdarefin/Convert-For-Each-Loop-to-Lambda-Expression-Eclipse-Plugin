@@ -33,7 +33,6 @@ import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.messages.Messages;
 import edu.cuny.citytech.foreachlooptolambda.ui.visitors.EnhancedForStatementVisitor;
-import edu.cuny.citytech.foreachlooptolambda.ui.visitors.ThrownExceptionFinderVisitor;
 import edu.cuny.citytech.refactoring.common.core.Refactoring;
 
 /**
@@ -126,7 +125,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// Checking if the EnhancedForLoop iterate over collection
-	private static boolean checkEnhancedForStatementIteratesOverCollection(EnhancedForStatement enhancedForStatement,
+	private static boolean enhancedForStatementIteratesOverCollection(EnhancedForStatement enhancedForStatement,
 			IProgressMonitor pm) {
 
 		Expression expression = enhancedForStatement.getExpression();
@@ -169,14 +168,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	private static boolean checkEnhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
 			IMethod method, IProgressMonitor pm) {
 			
-			try {
-				String[] exceptionMethod =  method.getExceptionTypes();
-				System.out.println("Getting all the Exception Types "+java.util.Arrays.toString(exceptionMethod));
-			} catch (JavaModelException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			Expression expression = enhancedForStatement.getExpression();
+			ITypeBinding nodeBindingType = expression.resolveTypeBinding();
 		
 		return false;
 	}
@@ -211,9 +204,10 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
 			
-			if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
+			if (enhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
 			}
+
 			// status.merge(checkMethodBody(method, new
 			// SubProgressMonitor(pm,1)));
 			pm.worked(1);
