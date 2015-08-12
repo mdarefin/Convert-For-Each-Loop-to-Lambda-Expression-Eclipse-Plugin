@@ -167,8 +167,17 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
 	// getting any uncaught exception
 	private static boolean checkEnhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
-			IProgressMonitor pm) {
-	
+			IMethod method, IProgressMonitor pm) {
+			
+			try {
+				String[] exceptionMethod =  method.getExceptionTypes();
+				System.out.println("Getting all the Exception Types "+java.util.Arrays.toString(exceptionMethod));
+			} catch (JavaModelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		
 		return false;
 	}
 
@@ -198,10 +207,10 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
-			if (checkEnhancedForStatementContainExceptions(enhancedForStatement, pm)) {
+			if (checkEnhancedForStatementContainExceptions(enhancedForStatement, method, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
-
+			
 			if (checkEnhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
 			}
