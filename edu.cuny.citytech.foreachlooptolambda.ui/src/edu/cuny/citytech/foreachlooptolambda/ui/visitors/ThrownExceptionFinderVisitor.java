@@ -66,6 +66,13 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 		}
 	}
 
+	public ITypeBinding[] getAlreadyCaughtExceptions() {
+		ITypeBinding[] allCaughtExceptions = new ITypeBinding[this.caughtExceptions.size()];
+		//copying all the elements from hashSet to array
+		this.caughtExceptions.toArray(allCaughtExceptions);
+		return allCaughtExceptions;//returning the populated array
+	}
+
 	public boolean visit(Statement statement) {
 		this.exceptionsStack.push(this.thrownExceptions);
 		HashSet<Statement> exceptionSet = new HashSet<Statement>();
