@@ -12,7 +12,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
-	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
 
 	@Override
@@ -67,10 +66,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean containsException() {
 		// checkException();
 		return encounteredThrownCheckedException;
-	}
-
-	public boolean containsNEFs() {
-		return encounteredNonEffectivelyFinalVars;
 	}
 	
 }
