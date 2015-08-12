@@ -5,6 +5,8 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
@@ -32,7 +34,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		SimpleName name = node.getName();
+		IBinding iBinding = name.resolveBinding();
+		
 		System.out.println(name);
+		System.out.println("This is ITypeBinding: "+iBinding);
 		
 		return super.visit(node);
 	}
