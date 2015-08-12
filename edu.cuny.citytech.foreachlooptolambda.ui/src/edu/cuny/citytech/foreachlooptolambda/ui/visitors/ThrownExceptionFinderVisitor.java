@@ -68,9 +68,15 @@ public class ThrownExceptionFinderVisitor extends ASTVisitor {
 
 	public ITypeBinding[] getAlreadyCaughtExceptions() {
 		ITypeBinding[] allCaughtExceptions = new ITypeBinding[this.caughtExceptions.size()];
-		//copying all the elements from hashSet to array
+		// copying all the elements from hashSet to array
 		this.caughtExceptions.toArray(allCaughtExceptions);
-		return allCaughtExceptions;//returning the populated array
+		return allCaughtExceptions;// returning the populated array
+	}
+
+	public ITypeBinding[] getThrownUncaughtExceptions() {
+		ITypeBinding[] result = new ITypeBinding[this.thrownExceptions.size()];
+		this.thrownExceptions.toArray(result);// copying all the elements from hashSet to array
+		return result;// returning the populated array
 	}
 
 	public boolean visit(Statement statement) {
