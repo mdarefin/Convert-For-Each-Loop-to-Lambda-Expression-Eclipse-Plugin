@@ -5,6 +5,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
@@ -12,6 +13,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
+	private boolean encounteredMethodInvocation;
 	private int returnCount = 0;
 
 	@Override
@@ -23,6 +25,12 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(ContinueStatement node) {
 		this.encounteredContinueStatement = true;
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(MethodInvocation node) {
+		this.encounteredMethodInvocation = true;
 		return super.visit(node);
 	}
 	
@@ -64,8 +72,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	}
 
 	public boolean containsException() {
-		// checkException();
 		return encounteredThrownCheckedException;
+	}
+	
+	public boolean visitMethodInvocation() {
+		return encounteredMethodInvocation;
 	}
 	
 }
