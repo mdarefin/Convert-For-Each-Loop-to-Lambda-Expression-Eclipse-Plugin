@@ -6,10 +6,11 @@ import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.IBinding;
-import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	private boolean encounteredBreakStatement;
@@ -34,11 +35,17 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(MethodInvocation node) {
 		SimpleName name = node.getName();
-		IBinding iBinding = name.resolveBinding();
+		IMethodBinding iMethodBinding = (IMethodBinding) name.resolveBinding();
 		
-		System.out.println(name);
-		System.out.println("This is ITypeBinding: "+iBinding);
+		System.out.println("name of method: "+name);
+		System.out.println("This is IMethodinding: "+iMethodBinding);
 		
+		return super.visit(node);
+	}
+	
+	@Override
+	public boolean visit(ThrowStatement node) {
+		this.encounteredThrownCheckedException = true;
 		return super.visit(node);
 	}
 	
