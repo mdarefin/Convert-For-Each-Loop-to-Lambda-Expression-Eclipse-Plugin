@@ -197,8 +197,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
-			if (enhancedForStatementContainExceptions(enhancedForStatement, method, pm)
-					|| visitor.containsException()) {
+			if (visitor.containsException()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
 			

@@ -5,11 +5,10 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
-import org.eclipse.jdt.core.dom.IBinding;
 import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
-import org.eclipse.jdt.core.dom.SimpleName;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
@@ -31,24 +30,26 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.encounteredContinueStatement = true;
 		return super.visit(node);
 	}
-	
+
 	@Override
 	public boolean visit(MethodInvocation node) {
-		SimpleName name = node.getName();
-		IMethodBinding iMethodBinding = (IMethodBinding) name.resolveBinding();
-		
-		System.out.println("name of method: "+name);
-		System.out.println("This is IMethodinding: "+iMethodBinding);
-		
+		IMethodBinding iMethodBinding = node.resolveMethodBinding();
+		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
+		//if there are exceptions  
+		if (exceptionTypes.length >= 1) {
+			this.encounteredThrownCheckedException = true;
+		}
+
 		return super.visit(node);
 	}
-	
+
 	@Override
 	public boolean visit(ThrowStatement node) {
-		this.encounteredThrownCheckedException = true;
+		//TODO
+		//this.encounteredThrownCheckedException = true;
 		return super.visit(node);
 	}
-	
+
 	/**
 	 * checking if returnStatement is boolean, not null and has only one return
 	 * 
@@ -89,7 +90,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean containsException() {
 		return encounteredThrownCheckedException;
 	}
-	
+
 	public boolean containsNEFS() {
 		return encounteredNonEffectivelyFinalVars;
 	}
