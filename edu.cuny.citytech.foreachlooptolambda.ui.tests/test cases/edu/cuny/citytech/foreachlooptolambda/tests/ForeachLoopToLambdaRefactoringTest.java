@@ -57,97 +57,105 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	protected Refactoring getRefactoring(IMethod... methods) {
 		return new ForeachLoopToLambdaRefactoring(methods);
 	}
-	
+
 	public void testLoopWithContinue() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithBreak() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithBreakAndContinue() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
-	
 	public void testLoopWithReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-		
+
 	public void testLoopWithMultipleReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithIntReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithBooleanReturn() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverCollection() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverCollectionAray() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverCollectionImplement() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopImplementlIterable() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-		
+
 	public void testLoopIterateOverArrayList() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverList() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverArray() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopIterateOverCollectionNamePack() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopTryCatchException() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopThrowException() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopException() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopCatchException() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithMultipleExceptions() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopThrowMultipleExceptions() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithMultipleMethods() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
-	
+
 	public void testLoopWithMultipleMethodsThrowExceptons() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
+
+	public void testLoopWithExceptons() throws Exception {
+		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+	}
+
+	public void testLoopWithNoExceptons() throws Exception {
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+	}
+
 }
