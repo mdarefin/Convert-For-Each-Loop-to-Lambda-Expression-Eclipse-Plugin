@@ -123,11 +123,11 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	}
 
 	public void testLoopThrowException() throws Exception {
-		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
 	public void testLoopException() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
 	public void testLoopCatchException() throws Exception {
@@ -139,11 +139,11 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	}
 
 	public void testLoopThrowMultipleExceptions() throws Exception {
-		helperFail(new String[] { "m" }, new String[][] { new String[0] });
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
 	public void testLoopWithMultipleMethods() throws Exception {
-		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
 
 	public void testLoopWithMultipleMethodsThrowExceptons() throws Exception {
@@ -157,9 +157,14 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	public void testLoopWithExceptonsTryCatch() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
+	
+	public void testLoopWithThrownExceptonsTryCatch() throws Exception {
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+	}
 
 	public void testLoopWithNoExceptons() throws Exception {
 		helperPass(new String[] { "m" }, new String[][] { new String[0] });
 	}
+	
 
 }
