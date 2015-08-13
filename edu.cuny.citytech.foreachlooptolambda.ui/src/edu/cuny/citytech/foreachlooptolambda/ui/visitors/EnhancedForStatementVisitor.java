@@ -30,6 +30,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.encounteredContinueStatement = true;
 		return super.visit(node);
 	}
+	
+	private void handleException() {
+		this.encounteredThrownCheckedException = true;
+	}
 
 	@Override
 	public boolean visit(MethodInvocation node) {
@@ -37,7 +41,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
 		//if there are exceptions  
 		if (exceptionTypes.length >= 1) {
-			this.encounteredThrownCheckedException = true;
+			handleException();
 		}
 
 		return super.visit(node);
@@ -45,8 +49,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ThrowStatement node) {
-		//TODO
-		//this.encounteredThrownCheckedException = true;
+		handleException();
+		
 		return super.visit(node);
 	}
 
