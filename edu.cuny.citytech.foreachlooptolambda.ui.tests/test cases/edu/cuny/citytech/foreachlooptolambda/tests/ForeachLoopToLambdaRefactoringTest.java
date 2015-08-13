@@ -142,6 +142,10 @@ public class ForeachLoopToLambdaRefactoringTest extends RefactoringTest {
 	public void testLoopThrowMultipleExceptions() throws Exception {
 		helperFail(new String[] { "m" }, new String[][] { new String[0] });
 	}
+	
+	public void testLoopThrowMultipleMethods() throws Exception {
+		helperPass(new String[] { "m" }, new String[][] { new String[0] });
+	}
 
 
 }
