@@ -165,13 +165,10 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 	}
 
 	// getting any uncaught exception
-	private static boolean checkEnhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
+	private static boolean enhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
 			IMethod method, IProgressMonitor pm) {
 			
-			Expression expression = enhancedForStatement.getExpression();
-			ITypeBinding nodeBindingType = expression.resolveTypeBinding();
-		
-		return false;
+			return false;
 	}
 
 	// Checking with the precondiiton,
@@ -200,7 +197,8 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainMultipleReturn, method);
 			}
 
-			if (checkEnhancedForStatementContainExceptions(enhancedForStatement, method, pm)) {
+			if (enhancedForStatementContainExceptions(enhancedForStatement, method, pm)
+					|| visitor.containsException()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
 			
