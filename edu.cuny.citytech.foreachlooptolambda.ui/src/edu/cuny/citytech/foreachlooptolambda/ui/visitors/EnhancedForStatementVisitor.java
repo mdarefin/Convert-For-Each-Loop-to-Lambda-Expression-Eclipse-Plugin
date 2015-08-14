@@ -11,9 +11,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
-import org.eclipse.jdt.internal.core.util.ASTNodeFinder;
-import org.eclipse.jdt.internal.corext.dom.ASTNodes;
-import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
+import org.eclipse.jdt.core.dom.TryStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 	
@@ -34,6 +32,13 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	 */
 	public EnhancedForStatementVisitor(EnhancedForStatement enhancedForStatement) {
 		this.enhancedForStatement = enhancedForStatement;
+	}
+	//finding the TryStatement node 
+	public static ASTNode findTryAncestor(ASTNode node){
+		if(node == null || node instanceof TryStatement){
+			return node;
+		}
+		return findTryAncestor(node);
 	}
 
 	@Override
