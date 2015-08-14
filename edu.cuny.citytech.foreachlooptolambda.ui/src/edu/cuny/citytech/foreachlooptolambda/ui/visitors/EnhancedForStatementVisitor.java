@@ -5,19 +5,36 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
+import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
 import org.eclipse.jdt.core.dom.ThrowStatement;
+import org.eclipse.jdt.internal.core.util.ASTNodeFinder;
+import org.eclipse.jdt.internal.corext.dom.ASTNodes;
+import org.eclipse.jdt.internal.corext.refactoring.structure.ASTNodeSearchUtil;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
+	
 	private boolean encounteredBreakStatement;
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
+	
+	/**
+	 * The enhanced for statement that will be visited.
+	 */
+	private EnhancedForStatement enhancedForStatement;
+	/**
+	 * Create a new visitor.
+	 * @param enhancedForStatement The enhanced for statement that will be visited.
+	 */
+	public EnhancedForStatementVisitor(EnhancedForStatement enhancedForStatement) {
+		this.enhancedForStatement = enhancedForStatement;
+	}
 
 	@Override
 	public boolean visit(BreakStatement node) {
@@ -31,7 +48,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 	
-	private void handleException() {
+	private void handleException(ASTNode nodeContaingException) {
+		
+		nodeContaingException.getParent(); //gets the top node. If it returns null, there is no other top.
+		
+		
 		this.encounteredThrownCheckedException = true;
 	}
 
@@ -41,7 +62,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
 		//if there are exceptions  
 		if (exceptionTypes.length >= 1) {
-			handleException();
+			handleException(node);
 		}
 
 		return super.visit(node);
@@ -49,7 +70,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ThrowStatement node) {
-		handleException();
+		handleException(node);
 		
 		return super.visit(node);
 	}
