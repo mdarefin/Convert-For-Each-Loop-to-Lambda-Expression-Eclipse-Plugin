@@ -62,8 +62,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		// gets the top node. If it returns
 		// null, there is no other top.
 		ASTNode parent = nodeContaingException.getParent(); 
-		System.out.println(parent);
-		findTryAncestor(parent);
+		System.out.println(parent.getParent());
+		//findTryAncestor(parent);
 		
 
 		this.encounteredThrownCheckedException = true;
