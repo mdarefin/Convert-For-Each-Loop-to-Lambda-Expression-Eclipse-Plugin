@@ -14,28 +14,32 @@ import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
-	
+
 	private boolean encounteredBreakStatement;
 	private boolean encounteredContinueStatement;
 	private boolean encounteredInvalidReturnStatement;
 	private boolean encounteredThrownCheckedException;
 	private boolean encounteredNonEffectivelyFinalVars;
 	private int returnCount = 0;
-	
+
 	/**
 	 * The enhanced for statement that will be visited.
 	 */
 	private EnhancedForStatement enhancedForStatement;
+
 	/**
 	 * Create a new visitor.
-	 * @param enhancedForStatement The enhanced for statement that will be visited.
+	 * 
+	 * @param enhancedForStatement
+	 *            The enhanced for statement that will be visited.
 	 */
 	public EnhancedForStatementVisitor(EnhancedForStatement enhancedForStatement) {
 		this.enhancedForStatement = enhancedForStatement;
 	}
-	//finding the TryStatement node 
-	public static ASTNode findTryAncestor(ASTNode node){
-		if(node == null || node instanceof TryStatement){
+
+	// finding the TryStatement node
+	public static ASTNode findTryAncestor(ASTNode node) {
+		if (node == null || node instanceof TryStatement) {
 			return node;
 		}
 		return findTryAncestor(node);
@@ -52,12 +56,16 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.encounteredContinueStatement = true;
 		return super.visit(node);
 	}
-	
+
 	private void handleException(ASTNode nodeContaingException) {
+
+		// gets the top node. If it returns
+		// null, there is no other top.
+		ASTNode parent = nodeContaingException.getParent(); 
+		System.out.println(parent);
+		findTryAncestor(parent);
 		
-		nodeContaingException.getParent(); //gets the top node. If it returns null, there is no other top.
-		
-		
+
 		this.encounteredThrownCheckedException = true;
 	}
 
@@ -65,7 +73,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	public boolean visit(MethodInvocation node) {
 		IMethodBinding iMethodBinding = node.resolveMethodBinding();
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
-		//if there are exceptions  
+		// if there are exceptions
 		if (exceptionTypes.length >= 1) {
 			handleException(node);
 		}
@@ -76,7 +84,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThrowStatement node) {
 		handleException(node);
-		
+
 		return super.visit(node);
 	}
 
