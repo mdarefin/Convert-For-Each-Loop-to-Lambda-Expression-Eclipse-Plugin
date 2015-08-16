@@ -64,8 +64,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ASTNode parent = (nodeContaingException.getParent()).getParent(); 
 		System.out.println(parent);
 		//findTryAncestor(parent);
-
-		this.encounteredThrownCheckedException = true;
+		if(parent instanceof TryStatement){
+			this.encounteredThrownCheckedException = false;
+		}else{
+			this.encounteredThrownCheckedException = true;
+		}
 	}
 
 	@Override
