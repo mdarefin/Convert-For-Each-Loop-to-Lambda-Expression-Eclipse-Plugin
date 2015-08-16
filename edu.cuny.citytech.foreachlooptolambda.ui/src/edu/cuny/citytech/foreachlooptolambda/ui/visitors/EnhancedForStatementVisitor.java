@@ -1,5 +1,8 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.visitors;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
@@ -61,12 +64,17 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 		// gets the top node. If it returns
 		// null, there is no other top.
-		ASTNode parent = (nodeContaingException.getParent()).getParent(); 
+		ASTNode parent = (nodeContaingException.getParent()).getParent();
 		System.out.println(parent);
-		//findTryAncestor(parent);
-		if(parent instanceof TryStatement){
-			this.encounteredThrownCheckedException = false;
-		}else{
+		// findTryAncestor(parent);
+		if (parent instanceof TryStatement) {
+			
+			List catchList = Arrays.asList((((TryStatement) parent).catchClauses()));
+			
+			if (catchList.size() >= 1) {
+				this.encounteredThrownCheckedException = false;
+			}
+		} else {
 			this.encounteredThrownCheckedException = true;
 		}
 	}
