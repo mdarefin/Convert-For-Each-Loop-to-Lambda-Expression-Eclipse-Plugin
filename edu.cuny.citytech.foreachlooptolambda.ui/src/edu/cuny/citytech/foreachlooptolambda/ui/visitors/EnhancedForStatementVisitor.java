@@ -70,9 +70,14 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		if (parent instanceof TryStatement) {
 			
 			List catchList = Arrays.asList((((TryStatement) parent).catchClauses()));
-			
-			if (catchList.size() >= 1) {
-				this.encounteredThrownCheckedException = false;
+			System.out.println(catchList.size());
+			System.out.println(((TryStatement) parent).getFinally());
+			System.out.println(((TryStatement) parent).getFinally().getLength());
+//			if (catchList.size() >= 1 ) {
+//				this.encounteredThrownCheckedException = true;
+//			}
+			if(((TryStatement) parent).getFinally().getLength() < 1){
+				
 			}
 		} else {
 			this.encounteredThrownCheckedException = true;
