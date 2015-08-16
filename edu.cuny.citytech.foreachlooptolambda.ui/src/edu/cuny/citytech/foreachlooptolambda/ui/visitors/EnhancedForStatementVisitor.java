@@ -68,17 +68,20 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		System.out.println(parent);
 		// findTryAncestor(parent);
 		if (parent instanceof TryStatement) {
-			
+
 			List catchList = Arrays.asList((((TryStatement) parent).catchClauses()));
 			System.out.println(catchList.size());
 			System.out.println(((TryStatement) parent).getFinally());
-			System.out.println(((TryStatement) parent).getFinally().getLength());
-//			if (catchList.size() >= 1 ) {
-//				this.encounteredThrownCheckedException = true;
-//			}
-			if(((TryStatement) parent).getFinally().getLength() < 1){
-				
+			System.out.println("This is statment " + ((TryStatement) parent).getFinally());
+			if (catchList.size() >= 1) {
+
+				this.encounteredThrownCheckedException = false;
 			}
+			if (catchList.size() >= 1 && ((TryStatement) parent).getFinally() != null ) {
+
+				this.encounteredThrownCheckedException = true;
+			}
+
 		} else {
 			this.encounteredThrownCheckedException = true;
 		}
@@ -90,7 +93,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
 		// if there are exceptions
 		if (exceptionTypes.length >= 1) {
-			handleException(node);
+			this.encounteredThrownCheckedException = true;
 		}
 
 		return super.visit(node);
