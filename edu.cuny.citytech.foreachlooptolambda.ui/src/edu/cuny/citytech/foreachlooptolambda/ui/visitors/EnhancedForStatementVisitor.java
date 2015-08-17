@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.ContinueStatement;
@@ -66,26 +67,28 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		// null, there is no other top.
 		ASTNode tryStatementParent = (nodeContaingException.getParent()).getParent();
 		ASTNode throwStatementParent = tryStatementParent.getParent();
-		
-		//find MethodInvocation inside try-catch
-		
-		// findTryStatmaent if there is any catch block
-		if (tryStatementParent instanceof TryStatement) {
 
-			// check if there is any MethodInvocation node inside try block
+		if (throwStatementParent instanceof TryStatement) {
+			System.out.println("this is throwStatementParent");
 			this.encounteredThrownCheckedException = false;
+		}
+
+		// findTryStatmaent if there is any catch block
+		else if (tryStatementParent instanceof TryStatement) {
+
+			System.out.println("this is TryStatement");
 
 			List catchList = Arrays.asList((((TryStatement) tryStatementParent).catchClauses()));
 			// checking if there is any catchBlock
 			if (catchList.size() >= 1) {
-
 				this.encounteredThrownCheckedException = false;
 			}
 			System.out.println(catchList.size());
 			// checking if there is only try and finally block
-			if (catchList.size() == 1 && ((TryStatement) tryStatementParent).getFinally() != null) {
-
+			Block finallyBlock = ((TryStatement) tryStatementParent).getFinally();
+			if (finallyBlock != null) {
 				this.encounteredThrownCheckedException = true;
+				System.out.println(finallyBlock.getParent());
 			}
 
 		} else {
