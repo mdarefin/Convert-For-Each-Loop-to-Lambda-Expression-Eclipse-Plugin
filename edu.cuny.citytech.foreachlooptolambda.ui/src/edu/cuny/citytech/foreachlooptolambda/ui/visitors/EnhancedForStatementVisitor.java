@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.ITypeHierarchy;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
 import org.eclipse.jdt.core.dom.CatchClause;
@@ -36,6 +40,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	 * The enhanced for statement that will be visited.
 	 */
 	private EnhancedForStatement enhancedForStatement;
+	
+	private IProgressMonitor monitor;
 
 	/**
 	 * Create a new visitor.
@@ -43,8 +49,9 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	 * @param enhancedForStatement
 	 *            The enhanced for statement that will be visited.
 	 */
-	public EnhancedForStatementVisitor(EnhancedForStatement enhancedForStatement) {
+	public EnhancedForStatementVisitor(EnhancedForStatement enhancedForStatement, IProgressMonitor monitor) {
 		this.enhancedForStatement = enhancedForStatement;
+		this.monitor = monitor;
 	}
 
 	// finding the TryStatement node
@@ -70,9 +77,10 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	/**
 	 * @param nodeContaingException The node that throws an exception.
 	 * @param exceptionTypes The list of exceptions being thrown.
+	 * @throws JavaModelException 
 	 */
-	private void handleException(ASTNode nodeContaingException, ITypeBinding... exceptionTypes) {
-		Set<ITypeBinding> exceptionTypeSet = new HashSet<ITypeBinding>(Arrays.asList(exceptionTypes));
+	private void handleException(ASTNode nodeContaingException, ITypeBinding... exceptionTypes) throws JavaModelException {
+		Set<ITypeBinding> thrownExceptionTypeSet = new HashSet<ITypeBinding>(Arrays.asList(exceptionTypes));
 		
 		// gets the top node. If it returns
 		// null, there is no other top.
@@ -91,10 +99,18 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = tryStatement.catchClauses();
 			
-			Stream<SingleVariableDeclaration> varDeclStream = catchClauses.stream().map(CatchClause::getException);
-			Stream<Type> exceptionTypeNodeStream = varDeclStream.map(SingleVariableDeclaration::getType);
-			Stream<ITypeBinding> exceptionTypeBindingStream = exceptionTypeNodeStream.map(Type::resolveBinding);
-			this.encounteredThrownCheckedException = !exceptionTypeBindingStream.anyMatch(t -> exceptionTypeSet.contains(t));
+			Stream<SingleVariableDeclaration> catchVarDeclStream = catchClauses.stream().map(CatchClause::getException);
+			Stream<Type> caughtExceptionTypeNodeStream = catchVarDeclStream.map(SingleVariableDeclaration::getType);
+			Stream<ITypeBinding> caughtExceptionTypeBindingStream = caughtExceptionTypeNodeStream.map(Type::resolveBinding);
+			Stream<IJavaElement> caughtExceptionTypeJavaStream = caughtExceptionTypeBindingStream.map(ITypeBinding::getJavaElement);
+			
+			//for each thrown exception type, check if it is a subtype of the caught exceptions types.
+			for (ITypeBinding te : thrownExceptionTypeSet) {
+				IType javaType = (IType) te.getJavaElement();
+				ITypeHierarchy supertypeHierarchy = javaType.newSupertypeHierarchy(monitor);
+//				caughtExceptionTypeJavaStream. supertypeHierarchy.contains();
+				this.encounteredThrownCheckedException = !caughtExceptionTypeJavaStream.anyMatch(t -> supertypeHierarchy.contains((IType) t));
+			}
 		} else {
 			this.encounteredThrownCheckedException = true;
 		}
@@ -106,7 +122,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
 		// if there are exceptions
 		if (exceptionTypes.length >= 1) {
-			handleException(node, exceptionTypes);
+			try {
+				handleException(node, exceptionTypes);
+			} catch (JavaModelException e) {
+				throw new RuntimeException(e);
+			}
 		}
 
 		return super.visit(node);
@@ -115,7 +135,11 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(ThrowStatement node) {
 		ITypeBinding thrownExceptionType = node.getExpression().resolveTypeBinding();
-		handleException(node, thrownExceptionType);
+		try {
+			handleException(node, thrownExceptionType);
+		} catch (JavaModelException e) {
+			throw new RuntimeException(e);
+		}
 
 		return super.visit(node);
 	}
