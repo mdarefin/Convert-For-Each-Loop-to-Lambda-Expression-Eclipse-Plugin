@@ -8,6 +8,7 @@ import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Block;
 import org.eclipse.jdt.core.dom.BooleanLiteral;
 import org.eclipse.jdt.core.dom.BreakStatement;
+import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.ContinueStatement;
 import org.eclipse.jdt.core.dom.EnhancedForStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
@@ -76,21 +77,17 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		// findTryStatmaent if there is any catch block
 		else if (tryStatementParent instanceof TryStatement) {
 
-			System.out.println("this is TryStatement");
+			TryStatement tryStatement = (TryStatement) tryStatementParent;
+			List catchClauses = tryStatement.catchClauses();
 
-			List catchList = Arrays.asList((((TryStatement) tryStatementParent).catchClauses()));
 			// checking if there is any catchBlock
-			if (catchList.size() >= 1) {
-				this.encounteredThrownCheckedException = false;
-			}
-			System.out.println(catchList.size());
-			// checking if there is only try and finally block
-			Block finallyBlock = ((TryStatement) tryStatementParent).getFinally();
-			if (finallyBlock != null) {
+			catchClauses.stream().forEach(s -> System.out.println("this is catchBlock "+s));
+			if (catchClauses.size() >= 1) {
+				this.encounteredThrownCheckedException = false; // TODO: Not sufficient condition. See algo.
+			} else {
+				//at this point, there are no catch clauses.
 				this.encounteredThrownCheckedException = true;
-				System.out.println(finallyBlock.getParent());
 			}
-
 		} else {
 			this.encounteredThrownCheckedException = true;
 		}
