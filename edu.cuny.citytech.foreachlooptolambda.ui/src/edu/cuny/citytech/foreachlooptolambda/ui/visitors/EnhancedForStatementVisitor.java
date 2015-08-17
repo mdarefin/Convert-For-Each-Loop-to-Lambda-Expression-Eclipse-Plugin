@@ -1,7 +1,10 @@
 package edu.cuny.citytech.foreachlooptolambda.ui.visitors;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -15,8 +18,10 @@ import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.ReturnStatement;
+import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.ThrowStatement;
 import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.Type;
 
 public class EnhancedForStatementVisitor extends ASTVisitor {
 
@@ -62,8 +67,13 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		return super.visit(node);
 	}
 
-	private void handleException(ASTNode nodeContaingException) {
-
+	/**
+	 * @param nodeContaingException The node that throws an exception.
+	 * @param exceptionTypes The list of exceptions being thrown.
+	 */
+	private void handleException(ASTNode nodeContaingException, ITypeBinding... exceptionTypes) {
+		Set<ITypeBinding> exceptionTypeSet = new HashSet<ITypeBinding>(Arrays.asList(exceptionTypes));
+		
 		// gets the top node. If it returns
 		// null, there is no other top.
 		ASTNode tryStatementParent = (nodeContaingException.getParent()).getParent();
@@ -78,16 +88,13 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		else if (tryStatementParent instanceof TryStatement) {
 
 			TryStatement tryStatement = (TryStatement) tryStatementParent;
-			List catchClauses = tryStatement.catchClauses();
-
-			// checking if there is any catchBlock
-			catchClauses.stream().forEach(s -> System.out.println("this is catchBlock "+s));
-			if (catchClauses.size() >= 1) {
-				this.encounteredThrownCheckedException = false; // TODO: Not sufficient condition. See algo.
-			} else {
-				//at this point, there are no catch clauses.
-				this.encounteredThrownCheckedException = true;
-			}
+			@SuppressWarnings("unchecked")
+			List<CatchClause> catchClauses = tryStatement.catchClauses();
+			
+			Stream<SingleVariableDeclaration> varDeclStream = catchClauses.stream().map(CatchClause::getException);
+			Stream<Type> exceptionTypeNodeStream = varDeclStream.map(SingleVariableDeclaration::getType);
+			Stream<ITypeBinding> exceptionTypeBindingStream = exceptionTypeNodeStream.map(Type::resolveBinding);
+			this.encounteredThrownCheckedException = !exceptionTypeBindingStream.anyMatch(t -> exceptionTypeSet.contains(t));
 		} else {
 			this.encounteredThrownCheckedException = true;
 		}
@@ -99,7 +106,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		ITypeBinding[] exceptionTypes = iMethodBinding.getExceptionTypes();
 		// if there are exceptions
 		if (exceptionTypes.length >= 1) {
-			handleException(node);
+			handleException(node, exceptionTypes);
 		}
 
 		return super.visit(node);
@@ -107,7 +114,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(ThrowStatement node) {
-		handleException(node);
+		ITypeBinding thrownExceptionType = node.getExpression().resolveTypeBinding();
+		handleException(node, thrownExceptionType);
 
 		return super.visit(node);
 	}
