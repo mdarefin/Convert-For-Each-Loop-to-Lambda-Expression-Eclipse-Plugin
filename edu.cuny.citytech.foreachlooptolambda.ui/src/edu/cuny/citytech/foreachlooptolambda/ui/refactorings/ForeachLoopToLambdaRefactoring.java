@@ -164,13 +164,6 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		return true;
 	}
 
-	// getting any uncaught exception
-	private static boolean enhancedForStatementContainExceptions(EnhancedForStatement enhancedForStatement,
-			IMethod method, IProgressMonitor pm) {
-			
-			return false;
-	}
-
 	// Checking with the precondiiton,
 	private static RefactoringStatus checkEnhancedForStatement(EnhancedForStatement enhancedForStatement,
 			IMethod method, IProgressMonitor pm) {
