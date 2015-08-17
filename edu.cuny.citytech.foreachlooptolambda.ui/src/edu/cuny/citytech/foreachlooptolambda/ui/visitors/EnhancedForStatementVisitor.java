@@ -64,18 +64,26 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 
 		// gets the top node. If it returns
 		// null, there is no other top.
-		ASTNode parent = (nodeContaingException.getParent()).getParent();
-		System.out.println(parent);
-		// findTryAncestor(parent);
-		if (parent instanceof TryStatement) {
+		ASTNode tryStatementParent = (nodeContaingException.getParent()).getParent();
+		ASTNode throwStatementParent = tryStatementParent.getParent();
+		
+		//find MethodInvocation inside try-catch
+		
+		// findTryStatmaent if there is any catch block
+		if (tryStatementParent instanceof TryStatement) {
 
-			List catchList = Arrays.asList((((TryStatement) parent).catchClauses()));
-			
+			// check if there is any MethodInvocation node inside try block
+			this.encounteredThrownCheckedException = false;
+
+			List catchList = Arrays.asList((((TryStatement) tryStatementParent).catchClauses()));
+			// checking if there is any catchBlock
 			if (catchList.size() >= 1) {
 
 				this.encounteredThrownCheckedException = false;
 			}
-			if (catchList.size() >= 1 && ((TryStatement) parent).getFinally() != null ) {
+			System.out.println(catchList.size());
+			// checking if there is only try and finally block
+			if (catchList.size() == 1 && ((TryStatement) tryStatementParent).getFinally() != null) {
 
 				this.encounteredThrownCheckedException = true;
 			}
