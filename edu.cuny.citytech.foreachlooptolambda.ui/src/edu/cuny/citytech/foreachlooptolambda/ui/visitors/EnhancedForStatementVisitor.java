@@ -108,7 +108,6 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 			for (ITypeBinding te : thrownExceptionTypeSet) {
 				IType javaType = (IType) te.getJavaElement();
 				ITypeHierarchy supertypeHierarchy = javaType.newSupertypeHierarchy(monitor);
-//				caughtExceptionTypeJavaStream. supertypeHierarchy.contains();
 				this.encounteredThrownCheckedException = !caughtExceptionTypeJavaStream.anyMatch(t -> supertypeHierarchy.contains((IType) t));
 			}
 		} else {
