@@ -109,7 +109,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 			Stream<IJavaElement> caughtExceptionTypeJavaStream = caughtExceptionTypeBindingStream
 					.map(ITypeBinding::getJavaElement);
 
-			// for each thrown exception type, check if it is a subtype of the
+			// for each thrown exception type, check if it is a sub-type of the
 			// caught exceptions types.
 			for (ITypeBinding te : thrownExceptionTypeSet) {
 				IType javaType = (IType) te.getJavaElement();

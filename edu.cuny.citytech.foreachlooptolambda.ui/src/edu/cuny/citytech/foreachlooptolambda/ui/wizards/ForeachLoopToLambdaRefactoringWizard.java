@@ -18,11 +18,9 @@ import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambda
  *         Khatchadourian</a>
  *
  */
-public class ForeachLoopToLambdaRefactoringWizard extends
-		RefactoringWizard {
+public class ForeachLoopToLambdaRefactoringWizard extends RefactoringWizard {
 
-	public ForeachLoopToLambdaRefactoringWizard(
-			Refactoring refactoring) {
+	public ForeachLoopToLambdaRefactoringWizard(Refactoring refactoring) {
 		super(refactoring, RefactoringWizard.DIALOG_BASED_USER_INTERFACE);
 	}
 
@@ -36,12 +34,9 @@ public class ForeachLoopToLambdaRefactoringWizard extends
 	}
 
 	public static void startRefactoring(IMethod[] methods, Shell shell) {
-		Refactoring refactoring = new ForeachLoopToLambdaRefactoring(
-				methods);
-		ForeachLoopToLambdaRefactoringWizard wizard = new ForeachLoopToLambdaRefactoringWizard(
-				refactoring);
-		new RefactoringStarter().activate(wizard, shell,
-				RefactoringMessages.OpenRefactoringWizardAction_refactoring,
+		Refactoring refactoring = new ForeachLoopToLambdaRefactoring(methods);
+		ForeachLoopToLambdaRefactoringWizard wizard = new ForeachLoopToLambdaRefactoringWizard(refactoring);
+		new RefactoringStarter().activate(wizard, shell, RefactoringMessages.OpenRefactoringWizardAction_refactoring,
 				RefactoringSaveHelper.SAVE_REFACTORING);
 	}
 }
