@@ -40,7 +40,7 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	 * The enhanced for statement that will be visited.
 	 */
 	private EnhancedForStatement enhancedForStatement;
-	
+
 	private IProgressMonitor monitor;
 
 	/**
@@ -54,7 +54,8 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 		this.monitor = monitor;
 	}
 
-	// finding the TryStatement node
+	// finding the TryStatement node gets the top node. If it returns null,
+	// there is no other top.
 	public static ASTNode findTryAncestor(ASTNode node) {
 		if (node == null || node instanceof TryStatement) {
 			return node;
@@ -75,15 +76,17 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 	}
 
 	/**
-	 * @param nodeContaingException The node that throws an exception.
-	 * @param exceptionTypes The list of exceptions being thrown.
-	 * @throws JavaModelException 
+	 * @param nodeContaingException
+	 *            The node that throws an exception.
+	 * @param exceptionTypes
+	 *            The list of exceptions being thrown.
+	 * @throws JavaModelException
 	 */
-	private void handleException(ASTNode nodeContaingException, ITypeBinding... exceptionTypes) throws JavaModelException {
+	private void handleException(ASTNode nodeContaingException, ITypeBinding... exceptionTypes)
+			throws JavaModelException {
 		Set<ITypeBinding> thrownExceptionTypeSet = new HashSet<ITypeBinding>(Arrays.asList(exceptionTypes));
-		
-		// gets the top node. If it returns
-		// null, there is no other top.
+
+		// getting the parent node to check if it's an instance of tryStatement
 		ASTNode tryStatementParent = (nodeContaingException.getParent()).getParent();
 		ASTNode throwStatementParent = tryStatementParent.getParent();
 
@@ -98,17 +101,21 @@ public class EnhancedForStatementVisitor extends ASTVisitor {
 			TryStatement tryStatement = (TryStatement) tryStatementParent;
 			@SuppressWarnings("unchecked")
 			List<CatchClause> catchClauses = tryStatement.catchClauses();
-			
+
 			Stream<SingleVariableDeclaration> catchVarDeclStream = catchClauses.stream().map(CatchClause::getException);
 			Stream<Type> caughtExceptionTypeNodeStream = catchVarDeclStream.map(SingleVariableDeclaration::getType);
-			Stream<ITypeBinding> caughtExceptionTypeBindingStream = caughtExceptionTypeNodeStream.map(Type::resolveBinding);
-			Stream<IJavaElement> caughtExceptionTypeJavaStream = caughtExceptionTypeBindingStream.map(ITypeBinding::getJavaElement);
-			
-			//for each thrown exception type, check if it is a subtype of the caught exceptions types.
+			Stream<ITypeBinding> caughtExceptionTypeBindingStream = caughtExceptionTypeNodeStream
+					.map(Type::resolveBinding);
+			Stream<IJavaElement> caughtExceptionTypeJavaStream = caughtExceptionTypeBindingStream
+					.map(ITypeBinding::getJavaElement);
+
+			// for each thrown exception type, check if it is a subtype of the
+			// caught exceptions types.
 			for (ITypeBinding te : thrownExceptionTypeSet) {
 				IType javaType = (IType) te.getJavaElement();
 				ITypeHierarchy supertypeHierarchy = javaType.newSupertypeHierarchy(monitor);
-				this.encounteredThrownCheckedException = !caughtExceptionTypeJavaStream.anyMatch(t -> supertypeHierarchy.contains((IType) t));
+				this.encounteredThrownCheckedException = !caughtExceptionTypeJavaStream
+						.anyMatch(t -> supertypeHierarchy.contains((IType) t));
 			}
 		} else {
 			this.encounteredThrownCheckedException = true;
