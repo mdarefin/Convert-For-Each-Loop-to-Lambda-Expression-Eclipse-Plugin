@@ -19,8 +19,7 @@ import edu.cuny.citytech.foreachlooptolambda.ui.wizards.ForeachLoopToLambdaRefac
  * @see org.eclipse.core.commands.IHandler
  * @see org.eclipse.core.commands.AbstractHandler
  */
-public class ForeachLoopToLambdaHandler extends
-		AbstractHandler {
+public class ForeachLoopToLambdaHandler extends AbstractHandler {
 
 	/**
 	 * the command has been executed, so extract extract the needed information
@@ -28,17 +27,14 @@ public class ForeachLoopToLambdaHandler extends
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection currentSelection = HandlerUtil
-				.getCurrentSelectionChecked(event);
+		ISelection currentSelection = HandlerUtil.getCurrentSelectionChecked(event);
 
 		List<?> list = SelectionUtil.toList(currentSelection);
-		IMethod[] methods = list.stream().filter(e -> e instanceof IMethod)
-				.toArray(length -> new IMethod[length]);
+		IMethod[] methods = list.stream().filter(e -> e instanceof IMethod).toArray(length -> new IMethod[length]);
 
 		if (methods.length > 0) {
 			Shell shell = HandlerUtil.getActiveShellChecked(event);
-			ForeachLoopToLambdaRefactoringWizard
-					.startRefactoring(methods, shell);
+			ForeachLoopToLambdaRefactoringWizard.startRefactoring(methods, shell);
 		}
 
 		return null;

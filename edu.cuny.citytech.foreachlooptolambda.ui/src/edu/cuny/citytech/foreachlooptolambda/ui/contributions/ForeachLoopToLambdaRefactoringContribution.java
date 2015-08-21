@@ -7,9 +7,7 @@ import org.eclipse.ltk.core.refactoring.RefactoringDescriptor;
 
 import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
 
-
-public class ForeachLoopToLambdaRefactoringContribution
-		extends RefactoringContribution {
+public class ForeachLoopToLambdaRefactoringContribution extends RefactoringContribution {
 
 	/*
 	 * (non-Javadoc)
@@ -20,11 +18,8 @@ public class ForeachLoopToLambdaRefactoringContribution
 	 * java.util.Map, int)
 	 */
 	@Override
-	public RefactoringDescriptor createDescriptor(String id, String project,
-			String description, String comment,
-			@SuppressWarnings("rawtypes") Map arguments, int flags)
-			throws IllegalArgumentException {
-		return new ForeachLoopToLambdaRefactoringDescriptor(
-				project, description, comment, arguments);
+	public RefactoringDescriptor createDescriptor(String id, String project, String description, String comment,
+			@SuppressWarnings("rawtypes") Map arguments, int flags) throws IllegalArgumentException {
+		return new ForeachLoopToLambdaRefactoringDescriptor(project, description, comment, arguments);
 	}
 }
