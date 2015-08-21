@@ -170,7 +170,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 		try {
 			RefactoringStatus status = new RefactoringStatus();
 			// create the visitor.
-			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor(enhancedForStatement,pm);
+			EnhancedForStatementVisitor visitor = new EnhancedForStatementVisitor(enhancedForStatement, pm);
 			// have the AST node "accept" the visitor.
 			enhancedForStatement.accept(visitor);
 
@@ -193,7 +193,7 @@ public class ForeachLoopToLambdaRefactoring extends Refactoring {
 			if (visitor.containsException()) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_ContainException, method);
 			}
-			
+
 			if (enhancedForStatementIteratesOverCollection(enhancedForStatement, pm)) {
 				addWarning(status, Messages.ForEachLoopToLambdaRefactoring_IteratesOverCollection, method);
 			}

@@ -5,11 +5,10 @@ import org.osgi.framework.BundleContext;
 import edu.cuny.citytech.foreachlooptolambda.ui.descriptors.ForeachLoopToLambdaRefactoringDescriptor;
 import edu.cuny.citytech.refactoring.common.ui.RefactoringPlugin;
 
-
 public class ForeachLoopToLambdaRefactoringPlugin extends RefactoringPlugin {
-	
+
 	private static ForeachLoopToLambdaRefactoringPlugin plugin;
-	
+
 	public static RefactoringPlugin getDefault() {
 		return plugin;
 	}
@@ -26,8 +25,11 @@ public class ForeachLoopToLambdaRefactoringPlugin extends RefactoringPlugin {
 		super.stop(context);
 	}
 
-	/* (non-Javadoc)
-	 * @see edu.cuny.citytech.refactoring.common.RefactoringPlugin#getRefactoringId()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * edu.cuny.citytech.refactoring.common.RefactoringPlugin#getRefactoringId()
 	 */
 	@Override
 	protected String getRefactoringId() {
