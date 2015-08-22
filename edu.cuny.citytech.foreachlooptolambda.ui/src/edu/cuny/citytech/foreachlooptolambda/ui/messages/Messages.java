@@ -6,7 +6,7 @@ package edu.cuny.citytech.foreachlooptolambda.ui.messages;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @author raffi
+ * @author Md Arefin
  *
  */
 public class Messages extends NLS {

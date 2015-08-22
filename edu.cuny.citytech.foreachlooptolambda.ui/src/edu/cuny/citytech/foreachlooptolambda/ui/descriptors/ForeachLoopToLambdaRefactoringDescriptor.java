@@ -10,7 +10,7 @@ import edu.cuny.citytech.refactoring.common.core.Refactoring;
 import edu.cuny.citytech.refactoring.common.core.RefactoringDescriptor;
 
 /**
- * @author raffi
+ * @author Md Arefin 
  *
  */
 public class ForeachLoopToLambdaRefactoringDescriptor extends RefactoringDescriptor {
