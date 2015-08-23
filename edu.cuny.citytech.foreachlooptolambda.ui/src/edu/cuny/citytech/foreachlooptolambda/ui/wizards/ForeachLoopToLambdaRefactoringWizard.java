@@ -15,7 +15,7 @@ import edu.cuny.citytech.foreachlooptolambda.ui.refactorings.ForeachLoopToLambda
 
 /**
  * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
- *         Khatchadourian</a>
+ *         Khatchadourian & Md Arefin </a>
  *
  */
 public class ForeachLoopToLambdaRefactoringWizard extends RefactoringWizard {

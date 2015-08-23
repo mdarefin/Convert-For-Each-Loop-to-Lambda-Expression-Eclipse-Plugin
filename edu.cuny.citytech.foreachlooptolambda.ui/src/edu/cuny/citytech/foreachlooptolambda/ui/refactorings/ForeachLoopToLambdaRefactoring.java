@@ -39,7 +39,7 @@ import edu.cuny.citytech.refactoring.common.core.Refactoring;
  * The activator class controls the plug-in life cycle
  * 
  * @author <a href="mailto:rkhatchadourian@citytech.cuny.edu">Raffi
- *         Khatchadourian</a>
+ *         Khatchadourian & Md Arefin</a>
  */
 public class ForeachLoopToLambdaRefactoring extends Refactoring {
 
